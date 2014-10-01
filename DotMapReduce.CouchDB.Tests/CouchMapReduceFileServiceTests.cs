@@ -14,13 +14,31 @@ namespace DotMapReduce.CouchDB.Tests
 		public void CreateDocument()
 		{
 			//Arrange
+			var fileService = new CouchMapReduceFileService();
 
 			//Act
-			var fileService = new CouchMapReduceFileService();
 			var id = fileService.CreateDocument("baseball", "", new { Item = "Orange" });
 
 			//Assert
 			Assert.That(id, Is.Not.Null);
+		}
+
+		[Test]
+		public void CreateDirectory()
+		{
+			//Arrange
+			var fileService = new CouchMapReduceFileService();
+
+			//Act
+			fileService.CreateDirectory("basketball");
+
+			//Assert
+		}
+
+		[Test]
+		public void ReadDocument()
+		{
+
 		}
 	}
 }
