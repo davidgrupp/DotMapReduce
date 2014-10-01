@@ -78,33 +78,5 @@ namespace DotMapReduce.CouchDB
 		
 	}
 
-	public interface ICouchDbDocument
-	{
-		String Id { get; set; }
-		String Rev { get; set; }
-	}
-
-	public class CouchDbDocument : ICouchDbDocument
-	{
-		public String Id { get; set; }
-		public String Rev { get; set; }
-	}
-
-	public class BaseballDoc : CouchDbDocument
-	{
-		public String prices { get; set; }
-		public List<Int32> p { get; set; }
-	}
-
-	public class DbDocs
-	{
-		public Int32 TotalRows { get; set; }
-		public List<DbDocId> Rows { get; set; }
-	}
-
-	public class DbDocId
-	{
-		public String Id { get; set; }
-		public String Key { get; set; }
-	}
+	
 }
