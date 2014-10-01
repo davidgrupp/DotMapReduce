@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotMapReduce", "..\DotMapRe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotMapReduce.Tests", "..\DotMapReduce.Tests\DotMapReduce.Tests.csproj", "{2DFF76A7-C32C-4520-99A3-DD6A2C5DEFFE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotMapReduce.CouchDB", "..\DotMapReduce.CouchDB\DotMapReduce.CouchDB.csproj", "{CAF7D238-D518-44AC-880A-9422CCDDE1C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotMapReduce.CouchDB.Tests", "..\DotMapReduce.CouchDB.Tests\DotMapReduce.CouchDB.Tests.csproj", "{82407E74-2F20-4E27-B434-717E2F63A744}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{2DFF76A7-C32C-4520-99A3-DD6A2C5DEFFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DFF76A7-C32C-4520-99A3-DD6A2C5DEFFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DFF76A7-C32C-4520-99A3-DD6A2C5DEFFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAF7D238-D518-44AC-880A-9422CCDDE1C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAF7D238-D518-44AC-880A-9422CCDDE1C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAF7D238-D518-44AC-880A-9422CCDDE1C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAF7D238-D518-44AC-880A-9422CCDDE1C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82407E74-2F20-4E27-B434-717E2F63A744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82407E74-2F20-4E27-B434-717E2F63A744}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82407E74-2F20-4E27-B434-717E2F63A744}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82407E74-2F20-4E27-B434-717E2F63A744}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

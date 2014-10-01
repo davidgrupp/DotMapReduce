@@ -28,7 +28,7 @@ namespace DotMapReduce
 			List<String> docIds = _fileService.ReadDocumentIds(inputDirectory);
 			foreach (var docId in docIds)
 			{
-				var inputValue = _fileService.ReadDocument(docId);
+				var inputValue = _fileService.ReadDocument(inputDirectory, docId);
 				_mapper.Map(inputValue, context.First());
 			}
 
@@ -43,7 +43,7 @@ namespace DotMapReduce
 			//save the results
 			_fileService.CreateDirectory(outputDirectory);
 			var docName = String.Format("Job{0:MM_dd_yy_hhmm}.txt", DateTime.Now);
-			_fileService.CreateDocument(docName);
+			_fileService.CreateDocument(outputDirectory, docName);
 			var aggergateKeys = context.First().GetAggergateKeys();
 			foreach (var key in aggergateKeys)
 			{

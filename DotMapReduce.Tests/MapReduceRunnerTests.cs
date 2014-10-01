@@ -21,9 +21,9 @@ namespace DotMapReduce.Tests
 			var fileService = new Mock<IMapReduceFileService>();
 
 			fileService.Setup(fs => fs.ReadDocumentIds("TestDir")).Returns(new List<String>() { "One", "Two", "Three" });
-			fileService.Setup(fs => fs.ReadDocument("One")).Returns("This is document one");
-			fileService.Setup(fs => fs.ReadDocument("Two")).Returns("This is document two");
-			fileService.Setup(fs => fs.ReadDocument("Three")).Returns("This is document three");
+			fileService.Setup(fs => fs.ReadDocument("TestDir", "One")).Returns("This is document one");
+			fileService.Setup(fs => fs.ReadDocument("TestDir", "Two")).Returns("This is document two");
+			fileService.Setup(fs => fs.ReadDocument("TestDir","Three")).Returns("This is document three");
 
 			//Act
 			var runner = new MapReduceRunner(mapper, reducer, fileService.Object);
