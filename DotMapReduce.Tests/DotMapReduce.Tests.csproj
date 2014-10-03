@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MapReduceRunnerTests.cs" />
+    <Compile Include="ParallelMapReduceRunnerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WordCountMapper.cs" />
     <Compile Include="WordCountReducer.cs" />

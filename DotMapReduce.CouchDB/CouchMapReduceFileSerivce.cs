@@ -3,6 +3,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -55,6 +56,17 @@ namespace DotMapReduce.CouchDB
 
 		}
 
+		public void WriteToDocument<T>(String directory, String Id, T content, Expression<Func<T, Object>> expression)
+		{
+			var expressionParts = Utilities.ObjectExpressionVisitor.GetPath<T>(expression);
+			var jsExpression = expressionParts.Aggregate((s1, s2) => String.Format("{0}.{1}", s1, s2));
+
+			//var request = new RestRequest(String.Format("/{0}/_design/app/_update/setfield/{1}?field=name&value=JP", directory, Id));
+			var request = new RestRequest(String.Format("/{0}/_design/app/_update/setfield/{1}", directory, Id));
+			request.AddParameter("expression", jsExpression);
+			request.AddParameter("value", request.JsonSerializer.Serialize(content));
+		}
+
 		public List<String> ReadDocumentIds(String directory)
 		{
 			var request = new RestRequest(String.Format("/{0}/_all_docs", directory));
@@ -75,8 +87,8 @@ namespace DotMapReduce.CouchDB
 			return response.Data;
 		}
 
-		
+
 	}
 
-	
+
 }

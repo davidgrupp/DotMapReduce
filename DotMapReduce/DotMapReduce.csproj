@@ -46,6 +46,7 @@
     <Compile Include="Interfaces\IMapReduceRunner.cs" />
     <Compile Include="MapReduceContext.cs" />
     <Compile Include="MapReduceRunner.cs" />
+    <Compile Include="ParallelMapReduceRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

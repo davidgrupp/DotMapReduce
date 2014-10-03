@@ -18,5 +18,8 @@ namespace DotMapReduce.Interfaces
 		
 		List<String> GetEmittedKeys();
 		List<String> GetEmittedValues(String key);
+
+		List<String> GetAggergateKeys();
+		String GetAggergateValue(String key);
 	}
 }
