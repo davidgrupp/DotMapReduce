@@ -46,7 +46,11 @@
     <Compile Include="Interfaces\IMapReduceRunner.cs" />
     <Compile Include="MapReduceContext.cs" />
     <Compile Include="MapReduceRunner.cs" />
-    <Compile Include="ParallelMapReduceRunner.cs" />
+    <Compile Include="Interfaces\Parallelization\IMapReduceManager.cs" />
+    <Compile Include="Interfaces\Parallelization\IMapReduceWorker.cs" />
+    <Compile Include="Parallelization\Threaded\ThreadedMapReduceManager.cs" />
+    <Compile Include="Parallelization\Threaded\ThreadedMapReduceWorker.cs" />
+    <Compile Include="Parallelization\Threaded\ThreadedMapReduceRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

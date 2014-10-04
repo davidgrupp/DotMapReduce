@@ -11,6 +11,7 @@ namespace DotMapReduce.Tests
 	{
 		public void Reduce(String key, IEnumerable<String> values, IMapReduceContext context)
 		{
+			System.Threading.Thread.Sleep(100);
 			context.EmitKeyValue(key, values.Count().ToString());
 		}
 	}

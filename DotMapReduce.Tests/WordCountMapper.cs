@@ -11,6 +11,7 @@ namespace DotMapReduce.Tests
 	{
 		public void Map(string inputValue, IMapReduceContext context)
 		{
+			System.Threading.Thread.Sleep(100);
 			var words = inputValue.Split(' ');
 			foreach (var word in words)
 			{

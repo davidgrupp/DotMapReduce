@@ -1,4 +1,5 @@
 ﻿using DotMapReduce.Interfaces;
+using DotMapReduce.Parallelization.Threaded;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -7,21 +8,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotMapReduce.Tests
+namespace DotMapReduce.Tests.Parallelization.Threaded
 {
 	[TestFixture]
-	public class MapReduceRunnerTests
+	public class ThreadedMapReduceRunnerTests
 	{
 		[Test]
-		public void MapReduceRunner_Run_Success()
+		public void ThreadedRunner_Run_Success()
 		{
 			//Arrange
 			var mapper = new WordCountMapper();
 			var reducer = new WordCountReducer();
 			var fileService = MockFileSystem.Setup();
-			
+
 			//Act
-			var runner = new MapReduceRunner(mapper, reducer, fileService.Object);
+			var runner = new ThreadedMapReduceRunner(mapper, reducer, fileService.Object);
 			runner.Run("TestDir", "OutDir");
 
 			//Assert
