@@ -56,7 +56,6 @@ namespace DotMapReduce.Parallelization.Threaded
 
 		public void Exchange(IMapReduceWorker worker)
 		{
-			var twrkr = worker as ThreadedMapReduceWorker;
 			
 		}
 
@@ -64,8 +63,10 @@ namespace DotMapReduce.Parallelization.Threaded
 		public List<String> ExchangeKeyValues(List<String> values, IMapReduceWorker otherWorker)
 		{
 			var otherWorkersData = new List<String>(); //otherWorker.WorkerId
+			var _otherWorkersData = MapperContext.GetPartitionedEmittedValues(otherWorker.WorkerId);
 
 			var myData = new List<String>();
+			var currentWorkersData = otherWorker.MapperContext.GetPartitionedEmittedValues(this.WorkerId);
 			myData.AddRange(values);
 
 			return otherWorkersData;

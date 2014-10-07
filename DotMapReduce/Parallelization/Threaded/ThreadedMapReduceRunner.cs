@@ -43,8 +43,8 @@ namespace DotMapReduce.Parallelization.Threaded
 			//run the mappers
 			_manager.RunMappers(inputDirectory, docIds);
 
-			//exchange data between works
-
+			//exchange data between workers
+			_manager.Exchange();
 
 			//run the reducers
 			//var keys = CombineKeys(_mapperContexts);
