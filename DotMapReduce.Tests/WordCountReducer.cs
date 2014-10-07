@@ -9,7 +9,7 @@ namespace DotMapReduce.Tests
 {
 	public class WordCountReducer : IMapReduceReducer
 	{
-		public void Reduce(String key, IEnumerable<String> values, IMapReduceContext context)
+		public void Reduce(String key, IEnumerable<String> values, IReducerContext context)
 		{
 			System.Threading.Thread.Sleep(100);
 			context.EmitKeyValue(key, values.Count().ToString());

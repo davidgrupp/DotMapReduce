@@ -10,20 +10,23 @@ namespace DotMapReduce.Parallelization.Threaded
 {
 	public class ThreadedMapReduceWorker : IMapReduceWorker
 	{
-		public ThreadedMapReduceWorker(Int32 workerId, IMapReduceFileService _fileService, IMapReduceMapper _mapper)
-			: this(workerId, _fileService, _mapper, new MapReduceContext())
+		public ThreadedMapReduceWorker(Int32 workerId, Int32 totalWorkers, IMapReduceManager manager, IMapReduceFileService _fileService, IMapReduceMapper _mapper)
+			: this(workerId, manager, _fileService, _mapper, new ThreadedMapperContext(totalWorkers), new ThreadedReducerContext())
 		{
 
 		}
-		public ThreadedMapReduceWorker(Int32 workerId, IMapReduceFileService fileService, IMapReduceMapper mapper, IMapReduceContext context)
+		public ThreadedMapReduceWorker(Int32 workerId, IMapReduceManager manager, IMapReduceFileService fileService, IMapReduceMapper mapper, IMapperContext mapContext, IReducerContext rdcContext)
 		{
 			WorkerId = workerId;
-			Context = context;
+			MapperContext = mapContext;
+			ReducerContext = rdcContext;
 			_fileService = fileService;
+			Manager = manager;
 			_mapper = mapper;
 		}
 		public Int32 WorkerId { get; set; }
-		public IMapReduceContext Context { get; set; }
+		public IMapperContext MapperContext { get; set; }
+		public IReducerContext ReducerContext { get; set; }
 		public IMapReduceManager Manager { get; set; }
 		private IMapReduceFileService _fileService;
 		private IMapReduceMapper _mapper;
@@ -36,7 +39,7 @@ namespace DotMapReduce.Parallelization.Threaded
 				foreach (var docId in idsBatch)
 				{
 					var inputValue = _fileService.ReadDocument(inputDirectory, docId);
-					_mapper.Map(inputValue, Context);
+					_mapper.Map(inputValue, MapperContext);
 				}
 			});
 		}
@@ -57,6 +60,7 @@ namespace DotMapReduce.Parallelization.Threaded
 			
 		}
 
+		
 		public List<String> ExchangeKeyValues(List<String> values, IMapReduceWorker otherWorker)
 		{
 			var otherWorkersData = new List<String>(); //otherWorker.WorkerId

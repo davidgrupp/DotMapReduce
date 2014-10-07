@@ -9,7 +9,8 @@ namespace DotMapReduce.Interfaces.Parallelization
 	public interface IMapReduceWorker
 	{
 		Int32 WorkerId { get; set; }
-		IMapReduceContext Context { get; set; }
+		IMapperContext MapperContext { get; set; }
+		IReducerContext ReducerContext { get; set; }
 		IMapReduceManager Manager { get; set; }
 
 		//void RunMapperBatch(String inputDirectory, List<String> idsBatch);

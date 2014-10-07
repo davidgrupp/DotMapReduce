@@ -1,4 +1,5 @@
-﻿using DotMapReduce.Interfaces;
+﻿using DotMapReduce.Generic;
+using DotMapReduce.Interfaces;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -21,7 +22,7 @@ namespace DotMapReduce.Tests
 			var fileService = MockFileSystem.Setup();
 			
 			//Act
-			var runner = new MapReduceRunner(mapper, reducer, fileService.Object);
+			var runner = new GenericMapReduceRunner(mapper, reducer, fileService.Object);
 			runner.Run("TestDir", "OutDir");
 
 			//Assert

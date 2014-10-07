@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotMapReduce
+namespace DotMapReduce.Generic
 {
-	public class MapReduceRunner : IMapReduceRunner
+	public class GenericMapReduceRunner : IMapReduceRunner
 	{
-		public MapReduceRunner(IMapReduceMapper mapper, IMapReduceReducer reducer, IMapReduceFileService fileService)
+		public GenericMapReduceRunner(IMapReduceMapper mapper, IMapReduceReducer reducer, IMapReduceFileService fileService)
 		{
 			_mapper = mapper;
 			_reducer = reducer;
@@ -21,33 +21,33 @@ namespace DotMapReduce
 
 		public void Run(String inputDirectory, String outputDirectory)
 		{
-			var context = new List<MapReduceContext>();
-			context.Add(new MapReduceContext());
+			var mapContext = new GenericMapperContext();
+			var rdcContext = new GenericReducerContext();
 
 			//run the mappers
 			List<String> docIds = _fileService.ReadDocumentIds(inputDirectory);
 			foreach (var docId in docIds)
 			{
 				var inputValue = _fileService.ReadDocument(inputDirectory, docId);
-				_mapper.Map(inputValue, context.First());
+				_mapper.Map(inputValue, mapContext);
 			}
 
 			//run the reducers
-			var keys = context.First().GetEmittedKeys();
+			var keys = mapContext.GetEmittedKeys();
 			foreach (var key in keys)
 			{
-				var values = context.First().GetEmittedValues(key);
-				_reducer.Reduce(key, values, context.First());
+				var values = mapContext.GetEmittedValues(key);
+				_reducer.Reduce(key, values, rdcContext);
 			}
 
 			//save the results
 			_fileService.CreateDirectory(outputDirectory);
 			var docName = String.Format("Job{0:MM_dd_yy_hhmm}.txt", DateTime.Now);
 			_fileService.CreateDocument(outputDirectory, docName);
-			var aggergateKeys = context.First().GetAggergateKeys();
+			var aggergateKeys = rdcContext.GetKeys();
 			foreach (var key in aggergateKeys)
 			{
-				var value = context.First().GetAggergateValue(key);
+				var value = rdcContext.GetValue(key);
 				_fileService.WriteToDocument(docName, String.Format("{0}: {1}", key, value));
 			}
 		}

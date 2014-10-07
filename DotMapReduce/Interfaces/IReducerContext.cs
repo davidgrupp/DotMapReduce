@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace DotMapReduce.Interfaces
 {
-	public interface IMapReduceMapper
+	public interface IReducerContext
 	{
-		void Map(String inputValue, IMapperContext context);
-		//Task MapAsync(String inputValue, IMapReduceContext context);
+		void EmitKeyValue(String key, String value);
+		
+		List<String> GetKeys();
+
+		String GetValue(String key);
 	}
 }

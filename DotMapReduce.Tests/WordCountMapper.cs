@@ -9,7 +9,7 @@ namespace DotMapReduce.Tests
 {
 	public class WordCountMapper : IMapReduceMapper
 	{
-		public void Map(string inputValue, IMapReduceContext context)
+		public void Map(string inputValue, IMapperContext context)
 		{
 			System.Threading.Thread.Sleep(100);
 			var words = inputValue.Split(' ');

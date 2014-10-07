@@ -35,7 +35,7 @@ namespace DotMapReduce.Parallelization.Threaded
 			var _manager = _managers.First();
 
 			var numOfWorkers = 8;
-			_manager.Workers.AddRange(Enumerable.Range(0, numOfWorkers).Select(i => new ThreadedMapReduceWorker(i, _fileService, _mapper)));
+			_manager.Workers.AddRange(Enumerable.Range(0, numOfWorkers).Select(i => new ThreadedMapReduceWorker(i, numOfWorkers, _manager, _fileService, _mapper)));
 
 			//read the doc ids
 			List<String> docIds = _fileService.ReadDocumentIds(inputDirectory); // eventual stream these
@@ -44,7 +44,7 @@ namespace DotMapReduce.Parallelization.Threaded
 			_manager.RunMappers(inputDirectory, docIds);
 
 			//exchange data between works
-			
+
 
 			//run the reducers
 			//var keys = CombineKeys(_mapperContexts);
@@ -63,7 +63,7 @@ namespace DotMapReduce.Parallelization.Threaded
 			//SaveReducerResults(outputDirectory);
 		}
 
-		
+
 
 		//private void RunReducerBatch(String inputDirectory, List<String> keyBatch)
 		//{
@@ -97,15 +97,5 @@ namespace DotMapReduce.Parallelization.Threaded
 		//	}
 		//}
 
-		private List<String> CombineKeys(List<IMapReduceContext> contexts)
-		{
-			List<String> allKeys = new List<String>();
-			foreach (var context in contexts)
-			{
-				allKeys.AddRange(context.GetEmittedKeys());
-			}
-
-			return allKeys.Distinct().ToList();
-		}
 	}
 }
