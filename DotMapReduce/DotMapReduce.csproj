@@ -51,6 +51,7 @@
     <Compile Include="Parallelization\Threaded\ThreadedMapReduceManager.cs" />
     <Compile Include="Parallelization\Threaded\ThreadedMapReduceWorker.cs" />
     <Compile Include="Parallelization\Threaded\ThreadedMapReduceRunner.cs" />
+    <Compile Include="Parallelization\WorkerExchanger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

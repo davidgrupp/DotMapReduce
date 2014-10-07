@@ -58,13 +58,21 @@ namespace DotMapReduce.CouchDB
 
 		public void WriteToDocument<T>(String directory, String Id, T content, Expression<Func<T, Object>> expression)
 		{
+			String jsField = String.Empty;
 			var expressionParts = Utilities.ObjectExpressionVisitor.GetPath<T>(expression);
-			var jsExpression = expressionParts.Aggregate((s1, s2) => String.Format("{0}.{1}", s1, s2));
+			if (false == expressionParts.Any())
+				throw new ArgumentException("expression must start with and have one property.");
+
+			jsField = expressionParts.First();
+
+
+			//var jsExpression = expressionParts.Aggregate((s1, s2) => String.Format("{0}.{1}", s1, s2));
 
 			//var request = new RestRequest(String.Format("/{0}/_design/app/_update/setfield/{1}?field=name&value=JP", directory, Id));
 			var request = new RestRequest(String.Format("/{0}/_design/app/_update/setfield/{1}", directory, Id));
-			request.AddParameter("expression", jsExpression);
-			request.AddParameter("value", request.JsonSerializer.Serialize(content));
+			request.AddParameter("expression", jsField, ParameterType.QueryString);
+			request.AddParameter("value", request.JsonSerializer.Serialize(content), ParameterType.QueryString);
+			_client.Put(request);
 		}
 
 		public List<String> ReadDocumentIds(String directory)
@@ -87,6 +95,25 @@ namespace DotMapReduce.CouchDB
 			return response.Data;
 		}
 
+
+
+		public void CreateValueUpdateHandler(String directory)
+		{
+			var request = new RestRequest(String.Format("/{0}/_design/app/_update/appendvalue", directory));
+			request.RequestFormat = DataFormat.Json;
+			request.AddBody(new { });
+			var response = _client.Put<CouchDbDocument>(request);
+			//return response.Data.Id;
+		}
+
+		public void CreateListUpdateHandler(String directory)
+		{
+			var request = new RestRequest(String.Format("/{0}/_design/app/_update/appendlist", directory));
+			request.RequestFormat = DataFormat.Json;
+			request.AddBody(new { update = "function(doc, req) { doc.[field].push(value); }" });
+			var response = _client.Put<CouchDbDocument>(request);
+			//return response.Data.Id;
+		}
 
 	}
 

@@ -48,6 +48,7 @@
     <Compile Include="MapReduceRunnerTests.cs" />
     <Compile Include="MockFileSystem.cs" />
     <Compile Include="Parallelization\Threaded\ThreadedMapReduceRunnerTests.cs" />
+    <Compile Include="Parallelization\WorkerExchangerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WordCountMapper.cs" />
     <Compile Include="WordCountReducer.cs" />
