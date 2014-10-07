@@ -1,48 +1,65 @@
-﻿using System;
+﻿using DotMapReduce.Interfaces.Parallelization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DotMapReduce.Parallelization
 {
-	public class WorkerExchanger
+	public class WorkerExchanger : IWorkerExchanger
 	{
-		public List<Tuple<Int32, Int32>> GetExchanges()
+		private List<IMapReduceWorker> _workers = null;
+
+		public void ExchangeData(List<IMapReduceWorker> workers)
 		{
-			var results = new List<Tuple<Int32, Int32>>();
+			_workers = workers;
+			Exchange(0, _workers.Count - 1).Wait();
+		}
 
-			var num = 10;
-			var vals = new int[num, num - 1];
-			var tmp = Enumerable.Range(0, num - 1).Select(n => Enumerable.Range(n + 1, (num - n) - 1).ToList()).ToArray();
-
-			var current = new List<Int32>();
-			for (var x = 0; x < num - 1; x++)
+		private Task Exchange(Int32 start, Int32 end)
+		{
+			return Task.Run(() =>
 			{
-				current = new List<Int32>();
-				var first = tmp[0].First();
-				tmp[0].Remove(first);
-				current.Add(0);
-				current.Add(first);
-				results.Add(new Tuple<Int32, Int32>(0, first));
-				for (var y = 1; y < num - 1; y++)
+				if (start >= end)
+					return;
+				Int32 mid = ((start + end + 1) / 2);
+				for (var x = mid; x <= end; x++)
 				{
-					if (false == current.Any(v => v == y) && tmp[y].Any())
+					var exchangeTasks = new List<Task>();
+					for (int y = start, i = 0; y <= mid - 1; y++, i++)
 					{
-						var next = tmp[y].FirstOrDefault(v => false == current.Any(w => w == v));
-						if (0 < next)
+						if ((x + i) <= end)
 						{
-							current.Add(y);
-							tmp[y].Remove(next);
-
-							current.Add(next);
-							results.Add(new Tuple<Int32, Int32>(y, next));
+							exchangeTasks.Add(DoExchange(y, x + i));
+						}
+						else
+						{
+							exchangeTasks.Add(DoExchange(y, x + i - mid));
 						}
 					}
+					Task.WaitAll(exchangeTasks.ToArray());
 				}
-			}
 
-			return results;
+				var tskLeft = Exchange(start, mid - 1);
+				var tskRght = Exchange(mid, end);
+
+				Task.WaitAll(tskLeft, tskRght);
+			});
 		}
+
+		private Task DoExchange(Int32 w1, Int32 w2)
+		{
+			return Task.Run(() =>
+			{
+				//Thread.Sleep(10);
+				var worker1 = _workers[w1];
+				var worker2 = _workers[w2];
+				worker1.Exchange(worker2);
+			});
+		}
+
+
 	}
 }

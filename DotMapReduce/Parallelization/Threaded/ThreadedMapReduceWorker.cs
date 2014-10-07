@@ -10,17 +10,19 @@ namespace DotMapReduce.Parallelization.Threaded
 {
 	public class ThreadedMapReduceWorker : IMapReduceWorker
 	{
-		public ThreadedMapReduceWorker(IMapReduceFileService _fileService, IMapReduceMapper _mapper)
-			: this(_fileService, _mapper, new MapReduceContext())
+		public ThreadedMapReduceWorker(Int32 workerId, IMapReduceFileService _fileService, IMapReduceMapper _mapper)
+			: this(workerId, _fileService, _mapper, new MapReduceContext())
 		{
 
 		}
-		public ThreadedMapReduceWorker(IMapReduceFileService fileService, IMapReduceMapper mapper, IMapReduceContext context)
+		public ThreadedMapReduceWorker(Int32 workerId, IMapReduceFileService fileService, IMapReduceMapper mapper, IMapReduceContext context)
 		{
+			WorkerId = workerId;
 			Context = context;
 			_fileService = fileService;
 			_mapper = mapper;
 		}
+		public Int32 WorkerId { get; set; }
 		public IMapReduceContext Context { get; set; }
 		public IMapReduceManager Manager { get; set; }
 		private IMapReduceFileService _fileService;
@@ -49,8 +51,20 @@ namespace DotMapReduce.Parallelization.Threaded
 		}
 
 
+		public void Exchange(IMapReduceWorker worker)
+		{
+			var twrkr = worker as ThreadedMapReduceWorker;
+			
+		}
 
+		public List<String> ExchangeKeyValues(List<String> values, IMapReduceWorker otherWorker)
+		{
+			var otherWorkersData = new List<String>(); //otherWorker.WorkerId
 
+			var myData = new List<String>();
+			myData.AddRange(values);
 
+			return otherWorkersData;
+		}
 	}
 }

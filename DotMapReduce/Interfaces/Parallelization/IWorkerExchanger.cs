@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace DotMapReduce.Interfaces.Parallelization
 {
-	public interface IMapReduceManager
+	public interface IWorkerExchanger
 	{
-		List<IMapReduceWorker> Workers { get; }
-		void RunMappers(String inputDirectory, List<String> docIds);
-		void Exchange();
+		void ExchangeData(List<IMapReduceWorker> workers);
 	}
 }

@@ -1,4 +1,6 @@
-﻿using DotMapReduce.Parallelization;
+﻿using DotMapReduce.Interfaces.Parallelization;
+using DotMapReduce.Parallelization;
+using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -14,10 +16,23 @@ namespace DotMapReduce.Tests.Parallelization
 		[Test]
 		public void GetExchanges()
 		{
+			var num = 100;
+			var workers = Enumerable.Range(0, num).Select(i => new Mock<IMapReduceWorker>()).ToList();
+			foreach (var worker in workers)
+			{
+				worker.Setup(w => w.Exchange(It.IsAny<IMapReduceWorker>()));
+			}
+
 
 			//
 			var exhngr = new WorkerExchanger();
-			var results = exhngr.GetExchanges();
+			exhngr.ExchangeData(workers.Select(w => w.Object).ToList());
+
+
+			foreach (var worker in workers)
+			{
+				//worker.Verify(w => w.Exchange(It.IsAny<IMapReduceWorker>()), Times.Exactly(num - 1));
+			}
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using DotMapReduce.Interfaces;
+using DotMapReduce.Interfaces.Parallelization;
 using DotMapReduce.Parallelization.Threaded;
 using Moq;
 using NUnit.Framework;
@@ -20,9 +21,10 @@ namespace DotMapReduce.Tests.Parallelization.Threaded
 			var mapper = new WordCountMapper();
 			var reducer = new WordCountReducer();
 			var fileService = MockFileSystem.Setup();
+			Mock<IWorkerExchanger> workerExchanger = new Mock<IWorkerExchanger>();
 
 			//Act
-			var runner = new ThreadedMapReduceRunner(mapper, reducer, fileService.Object);
+			var runner = new ThreadedMapReduceRunner(mapper, reducer, fileService.Object, workerExchanger.Object);
 			runner.Run("TestDir", "OutDir");
 
 			//Assert

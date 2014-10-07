@@ -44,6 +44,7 @@
     <Compile Include="Interfaces\IMapReduceMapper.cs" />
     <Compile Include="Interfaces\IMapReduceReducer.cs" />
     <Compile Include="Interfaces\IMapReduceRunner.cs" />
+    <Compile Include="Interfaces\Parallelization\IWorkerExchanger.cs" />
     <Compile Include="MapReduceContext.cs" />
     <Compile Include="MapReduceRunner.cs" />
     <Compile Include="Interfaces\Parallelization\IMapReduceManager.cs" />

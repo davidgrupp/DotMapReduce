@@ -9,10 +9,14 @@ namespace DotMapReduce.Parallelization.Threaded
 {
 	public class ThreadedMapReduceManager : IMapReduceManager
 	{
-		public ThreadedMapReduceManager()
+		public ThreadedMapReduceManager(IWorkerExchanger workerExchange)
 		{
+			_workerExchange = workerExchange;
 			Workers = new List<IMapReduceWorker>();
 		}
+
+		private IWorkerExchanger _workerExchange;
+
 		public List<IMapReduceWorker> Workers { get; private set; }
 
 		public void RunMappers(String inputDirectory, List<String> docIds)
@@ -34,9 +38,9 @@ namespace DotMapReduce.Parallelization.Threaded
 
 		}
 
-		public void SendPartitionedData()
+		public void Exchange()
 		{
-
+			_workerExchange.ExchangeData(Workers);
 		}
 
 		public void SaveResults()

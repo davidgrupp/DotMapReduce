@@ -10,15 +10,17 @@ namespace DotMapReduce.Parallelization.Threaded
 {
 	public class ThreadedMapReduceRunner : IMapReduceRunner
 	{
-		public ThreadedMapReduceRunner(IMapReduceMapper mapper, IMapReduceReducer reducer, IMapReduceFileService fileService)
+		public ThreadedMapReduceRunner(IMapReduceMapper mapper, IMapReduceReducer reducer, IMapReduceFileService fileService, IWorkerExchanger workerExchange)
 		{
 			_mapper = mapper;
 			_reducer = reducer;
 			_fileService = fileService;
+			_workerExchange = workerExchange;
 		}
 		private IMapReduceMapper _mapper;
 		private IMapReduceReducer _reducer;
 		private IMapReduceFileService _fileService;
+		private IWorkerExchanger _workerExchange;
 
 		private List<IMapReduceWorker> _workers;
 		private List<IMapReduceManager> _managers;
@@ -28,12 +30,12 @@ namespace DotMapReduce.Parallelization.Threaded
 			_workers = new List<IMapReduceWorker>();
 			_managers = new List<IMapReduceManager>();
 
-			_managers.Add(new ThreadedMapReduceManager());
+			_managers.Add(new ThreadedMapReduceManager(_workerExchange));
 
 			var _manager = _managers.First();
 
 			var numOfWorkers = 8;
-			_manager.Workers.AddRange(Enumerable.Range(0, numOfWorkers).Select(i => new ThreadedMapReduceWorker(_fileService, _mapper)));
+			_manager.Workers.AddRange(Enumerable.Range(0, numOfWorkers).Select(i => new ThreadedMapReduceWorker(i, _fileService, _mapper)));
 
 			//read the doc ids
 			List<String> docIds = _fileService.ReadDocumentIds(inputDirectory); // eventual stream these
@@ -41,6 +43,8 @@ namespace DotMapReduce.Parallelization.Threaded
 			//run the mappers
 			_manager.RunMappers(inputDirectory, docIds);
 
+			//exchange data between works
+			
 
 			//run the reducers
 			//var keys = CombineKeys(_mapperContexts);
