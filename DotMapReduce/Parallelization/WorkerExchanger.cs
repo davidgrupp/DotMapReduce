@@ -18,7 +18,7 @@ namespace DotMapReduce.Parallelization
 			Exchange(0, _workers.Count - 1).Wait();
 		}
 
-		private Task Exchange(Int32 start, Int32 end)
+		private Task Exchange(Int32 start, Int32 end, IProgress<Int32> progress = null)
 		{
 			return Task.Run(() =>
 			{
@@ -38,12 +38,14 @@ namespace DotMapReduce.Parallelization
 						{
 							exchangeTasks.Add(DoExchange(y, x + i - mid));
 						}
+						if (null != progress)
+							progress.Report(1);
 					}
 					Task.WaitAll(exchangeTasks.ToArray());
 				}
 
-				var tskLeft = Exchange(start, mid - 1);
-				var tskRght = Exchange(mid, end);
+				var tskLeft = Exchange(start, mid - 1, progress);
+				var tskRght = Exchange(mid, end, progress);
 
 				Task.WaitAll(tskLeft, tskRght);
 			});
