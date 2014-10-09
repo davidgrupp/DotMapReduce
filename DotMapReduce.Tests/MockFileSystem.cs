@@ -53,7 +53,7 @@ namespace DotMapReduce.Tests
 			fileService.Verify(fs => fs.ReadDocument(InputDirectory, It.IsAny<String>()), Times.Exactly(16 * 15));
 		}
 
-		public static new IEnumerable<IGrouping<String, String>> GetReducerData()
+		public static IEnumerable<IGrouping<String, String>> GetReducerData()
 		{
 			List<IMapGrouping<String, String>> data = new List<IMapGrouping<String, String>>();
 			data.Add(new MapGrouping<String, String>("This", Enumerable.Range(0, 240).Select(i => "1").ToList()));
@@ -65,17 +65,27 @@ namespace DotMapReduce.Tests
 			return data;
 		}
 
-		public static void SetupReducers(Mock<IMapReduceFileService> fileService)
+		public static void SetupReducers(Mock<IReducerContext> context)
 		{
-			fileService.Setup(fs => fs.WriteToDocument(It.IsAny<String>(), "This: 240"));
-			fileService.Setup(fs => fs.WriteToDocument(It.IsAny<String>(), "is: 240"));
-			fileService.Setup(fs => fs.WriteToDocument(It.IsAny<String>(), "document: 240"));
-			fileService.Setup(fs => fs.WriteToDocument(It.IsAny<String>(), "one: 80"));
-			fileService.Setup(fs => fs.WriteToDocument(It.IsAny<String>(), "two: 80"));
-			fileService.Setup(fs => fs.WriteToDocument(It.IsAny<String>(), "three: 80"));
+			context.Setup(c => c.EmitKeyValue("This", "240"));
+			context.Setup(c => c.EmitKeyValue("is", "240"));
+			context.Setup(c => c.EmitKeyValue("document", "240"));
+			context.Setup(c => c.EmitKeyValue("one", "80"));
+			context.Setup(c => c.EmitKeyValue("two", "80"));
+			context.Setup(c => c.EmitKeyValue("three", "80"));
 		}
 
-		public static void VerifyReducers(Mock<IMapReduceFileService> fileService)
+		public static void VerifyReducers(Mock<IReducerContext> context)
+		{
+			context.Verify(c => c.EmitKeyValue("This", "240"));
+			context.Verify(c => c.EmitKeyValue("is", "240"));
+			context.Verify(c => c.EmitKeyValue("document", "240"));
+			context.Verify(c => c.EmitKeyValue("one", "80"));
+			context.Verify(c => c.EmitKeyValue("two", "80"));
+			context.Verify(c => c.EmitKeyValue("three", "80"));
+		}
+
+		public static void VerifySavedReducerResults(Mock<IMapReduceFileService> fileService)
 		{
 			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "This: 240"));
 			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "is: 240"));

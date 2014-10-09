@@ -69,17 +69,18 @@ namespace DotMapReduce.Tests.Threaded
 			//Arrange
 			var keys = MockFileSystem.GetKeys();
 			var reducer = new WordCountReducer();
-			MockFileSystem.SetupReducers(_fileService);
+			var reducerContext = new Mock<IReducerContext>();
+			MockFileSystem.SetupReducers(reducerContext);
 			var data = MockFileSystem.GetReducerData();
 
-			var worker = new ThreadedMapReduceWorker(3, 10, _manager.Object, _fileService.Object, null, reducer);
+			var worker = new ThreadedMapReduceWorker(3, 10, _manager.Object, _fileService.Object, null, reducer, null, reducerContext.Object);
 			worker.SetExchangeData(data);
 
 			//Act
 			worker.RunReducersAsync().Wait();
 
 			//Assert
-			MockFileSystem.VerifyReducers(_fileService);
+			MockFileSystem.VerifyReducers(reducerContext);
 		}
 	}
 }

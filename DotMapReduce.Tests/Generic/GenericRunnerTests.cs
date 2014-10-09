@@ -27,7 +27,7 @@ namespace DotMapReduce.Tests
 
 			//Assert
 			MockFileSystem.VerifyMappers(fileService);
-			MockFileSystem.VerifyReducers(fileService);
+			MockFileSystem.VerifySavedReducerResults(fileService);
 		}
 	}
 }

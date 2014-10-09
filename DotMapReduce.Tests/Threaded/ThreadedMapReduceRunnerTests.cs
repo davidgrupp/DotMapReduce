@@ -28,7 +28,7 @@ namespace DotMapReduce.Tests.Threaded
 			runner.Run("TestDir", "OutDir");
 
 			//Assert
-			MockFileSystem.VerifyReducers(fileService);
+			MockFileSystem.VerifySavedReducerResults(fileService);
 		}
 	}
 }

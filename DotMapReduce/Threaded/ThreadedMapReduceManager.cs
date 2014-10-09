@@ -42,6 +42,9 @@ namespace DotMapReduce.Threaded
 
 		public void Exchange()
 		{
+			//set the workers own data first
+			
+			//exchange data
 			_workerExchange.ExchangeData(Workers);
 		}
 
