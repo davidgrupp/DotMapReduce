@@ -33,7 +33,7 @@ namespace DotMapReduce.Tests.Threaded
 			var mapper = new WordCountMapper();
 
 			//Act
-			var worker = new ThreadedMapReduceWorker(3, 10, _manager.Object, _fileService.Object, mapper);
+			var worker = new ThreadedMapReduceWorker(3, 10, _manager.Object, _fileService.Object, mapper, null);
 			worker.RunMapperBatchAsync(MockFileSystem.InputDirectory, keys).Wait();
 
 			//Assert
@@ -53,14 +53,32 @@ namespace DotMapReduce.Tests.Threaded
 			var context = new Mock<IMapperContext>();
 			context.Setup(c => c.GetPartitionedEmittedValues(4)).Returns(new Dictionary<String, List<String>>());
 
-			var otherWorker = new ThreadedMapReduceWorker(4, 10, _manager.Object, _fileService.Object, mapper, otherWrkContext.Object, null);
+			var otherWorker = new ThreadedMapReduceWorker(4, 10, _manager.Object, _fileService.Object, mapper, null, otherWrkContext.Object, null);
 
 			//Act
-			var worker = new ThreadedMapReduceWorker(3, 10, _manager.Object, _fileService.Object, mapper, context.Object, null);
+			var worker = new ThreadedMapReduceWorker(3, 10, _manager.Object, _fileService.Object, mapper, null, context.Object, null);
 			worker.ExchangeKeyValues(otherWorker);
 
 			//Assert
 
+		}
+
+		[Test, Category("Unit")]
+		public void Threaded_RunReducers_Success()
+		{
+			//Arrange
+			var keys = MockFileSystem.GetKeys();
+			var reducer = new WordCountReducer();
+			var data = MockFileSystem.GetReducerData();
+
+			var worker = new ThreadedMapReduceWorker(3, 10, _manager.Object, _fileService.Object, null, reducer);
+			worker.SetExchangeData(data);
+
+			//Act
+			worker.RunReducersAsync().Wait();
+
+			//Assert
+			MockFileSystem.VerifyReducers(_fileService);
 		}
 	}
 }

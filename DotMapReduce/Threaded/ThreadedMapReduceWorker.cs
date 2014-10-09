@@ -10,12 +10,12 @@ namespace DotMapReduce.Threaded
 {
 	public class ThreadedMapReduceWorker : IMapReduceWorker
 	{
-		public ThreadedMapReduceWorker(Int32 workerId, Int32 totalWorkers, IMapReduceManager manager, IMapReduceFileService _fileService, IMapper _mapper)
-			: this(workerId, totalWorkers, manager, _fileService, _mapper, new ThreadedMapperContext(totalWorkers), new ThreadedReducerContext())
+		public ThreadedMapReduceWorker(Int32 workerId, Int32 totalWorkers, IMapReduceManager manager, IMapReduceFileService fileService, IMapper mapper, IReducer reducer)
+			: this(workerId, totalWorkers, manager, fileService, mapper, reducer, new ThreadedMapperContext(totalWorkers), new ThreadedReducerContext())
 		{
 
 		}
-		public ThreadedMapReduceWorker(Int32 workerId, Int32 totalWorkers, IMapReduceManager manager, IMapReduceFileService fileService, IMapper mapper, IMapperContext mapContext, IReducerContext rdcContext)
+		public ThreadedMapReduceWorker(Int32 workerId, Int32 totalWorkers, IMapReduceManager manager, IMapReduceFileService fileService, IMapper mapper, IReducer reducer, IMapperContext mapContext, IReducerContext rdcContext)
 		{
 			WorkerId = workerId;
 			_totalWorkers = totalWorkers;
@@ -24,6 +24,7 @@ namespace DotMapReduce.Threaded
 			_fileService = fileService;
 			Manager = manager;
 			_mapper = mapper;
+			_reducer = reducer;
 			_workerKeyValues = new Dictionary<String, List<String>>();
 		}
 		public Int32 WorkerId { get; set; }
@@ -49,12 +50,7 @@ namespace DotMapReduce.Threaded
 			});
 		}
 
-		public void RunMapperBatch(string inputDirectory, List<string> idsBatch)
-		{
-			throw new NotImplementedException();
-		}
-
-		private Task RunReducerBatch(String inputDirectory, List<String> keyBatch)
+		public Task RunReducersAsync()
 		{
 			return Task.Run(() =>
 			{

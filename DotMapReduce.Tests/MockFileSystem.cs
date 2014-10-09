@@ -53,6 +53,18 @@ namespace DotMapReduce.Tests
 			fileService.Verify(fs => fs.ReadDocument(InputDirectory, It.IsAny<String>()), Times.Exactly(16 * 15));
 		}
 
+		public static Dictionary<String, List<String>> GetReducerData()
+		{
+			Dictionary<String, List<String>> data = new Dictionary<String, List<String>>();
+			data.Add("This", Enumerable.Range(0, 240).Select(i => "1").ToList());
+			data.Add("is", Enumerable.Range(0, 240).Select(i => "1").ToList());
+			data.Add("document", Enumerable.Range(0, 240).Select(i => "1").ToList());
+			data.Add("one", Enumerable.Range(0, 80).Select(i => "1").ToList());
+			data.Add("two", Enumerable.Range(0, 80).Select(i => "1").ToList());
+			data.Add("three", Enumerable.Range(0, 80).Select(i => "1").ToList());
+			return data;
+		}
+
 		public static void VerifyReducers(Mock<IMapReduceFileService> fileService)
 		{
 			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "This: 240"));

@@ -35,7 +35,7 @@ namespace DotMapReduce.Threaded
 			var _manager = _managers.First();
 
 			var numOfWorkers = 8;
-			_manager.Workers.AddRange(Enumerable.Range(0, numOfWorkers).Select(i => new ThreadedMapReduceWorker(i, numOfWorkers, _manager, _fileService, _mapper)));
+			_manager.Workers.AddRange(Enumerable.Range(0, numOfWorkers).Select(i => new ThreadedMapReduceWorker(i, numOfWorkers, _manager, _fileService, _mapper, _reducer)));
 
 			//read the doc ids
 			List<String> docIds = _fileService.ReadDocumentIds(inputDirectory); // eventual stream these
