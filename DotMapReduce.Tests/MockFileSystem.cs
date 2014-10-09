@@ -10,33 +10,57 @@ namespace DotMapReduce.Tests
 {
 	public static class MockFileSystem
 	{
-		public static Mock<IMapReduceFileService> Setup()
+		public const String InputDirectory = "TestDir";
+		public const String OutputDirectory = "OutDir";
+
+		public static List<String> GetKeys()
+		{
+			var keys = new List<String>();
+
+			for (var i = 0; i < 16 * 15; i += 3)
+			{
+				keys.AddRange(new List<String>() { "Key" + i, "Key" + (i + 1), "Key" + (i + 2) });
+			}
+
+			return keys;
+		}
+
+		public static Mock<IMapReduceFileService> SetupMappers()
 		{
 			var fileService = new Mock<IMapReduceFileService>();
 
-			var keys = new List<String>();
-
-			for (var i = 0; i < 16 * 30; i += 3)
-			{
-				keys.AddRange(new List<String>() { "Key" + i, "Key" + (i + 1), "Key" + (i + 2) });
-				fileService.Setup(fs => fs.ReadDocument("TestDir", "Key" + i)).Returns("This is document one");
-				fileService.Setup(fs => fs.ReadDocument("TestDir", "Key" + (i + 1))).Returns("This is document two");
-				fileService.Setup(fs => fs.ReadDocument("TestDir", "Key" + (i + 2))).Returns("This is document three");
-			}
-			fileService.Setup(fs => fs.ReadDocumentIds("TestDir")).Returns(keys);
+			SetupMappers(fileService);
 
 			return fileService;
 		}
 
-		public static void Verify(Mock<IMapReduceFileService> fileService)
+		public static void SetupMappers(Mock<IMapReduceFileService> fileService)
 		{
-			fileService.Verify(fs => fs.ReadDocument("TestDir", It.IsAny<String>()), Times.Exactly(16 * 30));
-			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "This: 480"));
-			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "is: 480"));
-			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "document: 480"));
-			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "one: 160"));
-			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "two: 160"));
-			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "three: 160"));
+			var keys = new List<String>();
+
+			for (var i = 0; i < 16 * 15; i += 3)
+			{
+				keys.AddRange(new List<String>() { "Key" + i, "Key" + (i + 1), "Key" + (i + 2) });
+				fileService.Setup(fs => fs.ReadDocument(InputDirectory, "Key" + i)).Returns("This is document one");
+				fileService.Setup(fs => fs.ReadDocument(InputDirectory, "Key" + (i + 1))).Returns("This is document two");
+				fileService.Setup(fs => fs.ReadDocument(InputDirectory, "Key" + (i + 2))).Returns("This is document three");
+			}
+			fileService.Setup(fs => fs.ReadDocumentIds(InputDirectory)).Returns(keys);
+		}
+
+		public static void VerifyMappers(Mock<IMapReduceFileService> fileService)
+		{
+			fileService.Verify(fs => fs.ReadDocument(InputDirectory, It.IsAny<String>()), Times.Exactly(16 * 15));
+		}
+
+		public static void VerifyReducers(Mock<IMapReduceFileService> fileService)
+		{
+			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "This: 240"));
+			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "is: 240"));
+			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "document: 240"));
+			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "one: 80"));
+			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "two: 80"));
+			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "three: 80"));
 		}
 	}
 }

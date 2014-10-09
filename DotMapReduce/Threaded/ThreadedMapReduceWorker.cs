@@ -36,11 +36,11 @@ namespace DotMapReduce.Threaded
 		{
 			return Task.Run(() =>
 			{
-				foreach (var docId in idsBatch)
+				Parallel.ForEach(idsBatch, docId =>
 				{
 					var inputValue = _fileService.ReadDocument(inputDirectory, docId);
 					_mapper.Map(inputValue, MapperContext);
-				}
+				});
 			});
 		}
 
@@ -56,10 +56,10 @@ namespace DotMapReduce.Threaded
 
 		public void Exchange(IMapReduceWorker worker)
 		{
-			
+
 		}
 
-		
+
 		public List<String> ExchangeKeyValues(List<String> values, IMapReduceWorker otherWorker)
 		{
 			var otherWorkersData = new List<String>(); //otherWorker.WorkerId

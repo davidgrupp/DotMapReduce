@@ -20,7 +20,7 @@ namespace DotMapReduce.Tests.Threaded
 			//Arrange
 			var mapper = new WordCountMapper();
 			var reducer = new WordCountReducer();
-			var fileService = MockFileSystem.Setup();
+			var fileService = MockFileSystem.SetupMappers();
 			Mock<IDataExchanger> workerExchanger = new Mock<IDataExchanger>();
 
 			//Act
@@ -28,7 +28,7 @@ namespace DotMapReduce.Tests.Threaded
 			runner.Run("TestDir", "OutDir");
 
 			//Assert
-			MockFileSystem.Verify(fileService);
+			MockFileSystem.VerifyReducers(fileService);
 		}
 	}
 }

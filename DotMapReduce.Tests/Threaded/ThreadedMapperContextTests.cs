@@ -18,7 +18,7 @@ namespace DotMapReduce.Tests.Threaded
 			var context = new ThreadedMapperContext(10);
 			for (var i = 0; i < 100; i++)
 			{
-				context.Emit(i.ToString(), "1");
+				context.EmitAsync(i.ToString(), "1");
 			}
 
 			//Act

@@ -11,22 +11,23 @@ using System.Threading.Tasks;
 namespace DotMapReduce.Tests
 {
 	[TestFixture, Category("Core"), Category("Generic")]
-	public class MapReduceRunnerTests
+	public class GenericRunnerTests
 	{
 		[Test, Category("Unit")]
-		public void MapReduceRunner_Run_Success()
+		public void GenericRunner_Run_Success()
 		{
 			//Arrange
 			var mapper = new WordCountMapper();
 			var reducer = new WordCountReducer();
-			var fileService = MockFileSystem.Setup();
+			var fileService = MockFileSystem.SetupMappers();
 
 			//Act
 			var runner = new GenericMapReduceRunner(mapper, reducer, fileService.Object);
-			runner.Run("TestDir", "OutDir");
+			runner.Run(MockFileSystem.InputDirectory, "OutDir");
 
 			//Assert
-			MockFileSystem.Verify(fileService);
+			MockFileSystem.VerifyMappers(fileService);
+			MockFileSystem.VerifyReducers(fileService);
 		}
 	}
 }

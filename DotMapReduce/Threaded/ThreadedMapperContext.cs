@@ -18,18 +18,25 @@ namespace DotMapReduce.Threaded
 		}
 		private Int32 _totalWorkers;
 		private Dictionary<Int32, List<Tuple<String, String>>> _mapPartitions;
-		public void Emit(String key, String value)
+		public Task EmitAsync(String key, String value)
 		{
-			var partition = PartitionUtilities.GetPartition(key, _totalWorkers);
-			if (_mapPartitions.ContainsKey(partition))
+			return Task.Run(() =>
 			{
-				_mapPartitions[partition].Add(new Tuple<String, String>(key, value));
-			}
-			else
-			{
-				_mapPartitions.Add(partition, new List<Tuple<String, String>>());
-				_mapPartitions[partition].Add(new Tuple<String, String>(key, value));
-			}
+				var partition = PartitionUtilities.GetPartition(key, _totalWorkers);
+				
+				lock (_mapPartitions)
+				{
+					if (_mapPartitions.ContainsKey(partition))
+					{
+						_mapPartitions[partition].Add(new Tuple<String, String>(key, value));
+					}
+					else
+					{
+						_mapPartitions.Add(partition, new List<Tuple<String, String>>());
+						_mapPartitions[partition].Add(new Tuple<String, String>(key, value));
+					}
+				}
+			});
 		}
 
 		public List<String> GetEmittedKeys()

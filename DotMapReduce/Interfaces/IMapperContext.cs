@@ -8,7 +8,7 @@ namespace DotMapReduce.Interfaces
 {
 	public interface IMapperContext
 	{
-		void Emit(String key, String value);
+		Task EmitAsync(String key, String value);
 
 		List<String> GetEmittedKeys();
 

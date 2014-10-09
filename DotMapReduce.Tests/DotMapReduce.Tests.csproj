@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Generic\MapReduceRunnerTests.cs" />
+    <Compile Include="Generic\GenericRunnerTests.cs" />
     <Compile Include="MockFileSystem.cs" />
     <Compile Include="Threaded\ThreadedMapperContextTests.cs" />
     <Compile Include="Threaded\ThreadedMapReduceRunnerTests.cs" />

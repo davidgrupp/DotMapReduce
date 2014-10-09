@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace DotMapReduce.CouchDB.Tests
 {
-	[TestFixture]
+	[TestFixture, Category("CouchDB")]
 	public class CouchMapReduceFileServiceTests
 	{
-		[Test]
+		[Test, Category("Integration")]
 		public void CreateDocument_String()
 		{
 			//Arrange
@@ -23,7 +23,7 @@ namespace DotMapReduce.CouchDB.Tests
 			Assert.That(id, Is.Not.Null);
 		}
 
-		[Test]
+		[Test, Category("Integration")]
 		public void CreateDocument_Empty()
 		{
 			//Arrange
@@ -36,7 +36,7 @@ namespace DotMapReduce.CouchDB.Tests
 			Assert.That(id, Is.Not.Null);
 		}
 
-		[Test]
+		[Test, Category("Integration")]
 		public void CreateDocument_Object()
 		{
 			//Arrange
@@ -49,7 +49,7 @@ namespace DotMapReduce.CouchDB.Tests
 			Assert.That(id, Is.Not.Null);
 		}
 
-		[Test]
+		[Test, Category("Integration")]
 		public void CreateDirectory()
 		{
 			//Arrange
@@ -61,7 +61,7 @@ namespace DotMapReduce.CouchDB.Tests
 			//Assert
 		}
 
-		[Test]
+		[Test, Category("Integration")]
 		public void ReadDocument()
 		{
 			//Arrange
@@ -75,12 +75,12 @@ namespace DotMapReduce.CouchDB.Tests
 			Assert.That(doc, Is.Not.Null);
 		}
 
-		[Test]
+		[Test, Category("Integration")]
 		public void ReadDocument_Object()
 		{
 			//Arrange
 			var fileService = new CouchMapReduceFileService();
-			var testDoc = new { Item = "Strawberry"};
+			var testDoc = new { Item = "Strawberry" };
 
 			//Act
 			var id = fileService.CreateDocument("baseball", "", testDoc);

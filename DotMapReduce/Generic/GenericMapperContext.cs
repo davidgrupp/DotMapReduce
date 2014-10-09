@@ -10,17 +10,23 @@ namespace DotMapReduce.Generic
 	public class GenericMapperContext : IMapperContext
 	{
 		private Dictionary<String, List<String>> _emittedValues = new Dictionary<String, List<String>>();
-		public void Emit(String key, String value)
+		public Task EmitAsync(String key, String value)
 		{
-			if (_emittedValues.ContainsKey(key))
+			return Task.Run(() =>
 			{
-				_emittedValues[key].Add(value);
-			}
-			else
-			{
-				_emittedValues.Add(key, new List<String>());
-				_emittedValues[key].Add(value);
-			}
+				lock (_emittedValues)
+				{
+					if (_emittedValues.ContainsKey(key))
+					{
+						_emittedValues[key].Add(value);
+					}
+					else
+					{
+						_emittedValues.Add(key, new List<String>());
+						_emittedValues[key].Add(value);
+					}
+				}
+			});
 		}
 
 		public List<string> GetEmittedKeys()

@@ -11,11 +11,11 @@ namespace DotMapReduce.Tests
 	{
 		public void Map(string inputValue, IMapperContext context)
 		{
-			System.Threading.Thread.Sleep(100);
+			System.Threading.Thread.Sleep(50);
 			var words = inputValue.Split(' ');
 			foreach (var word in words)
 			{
-				context.Emit(word, "1");
+				context.EmitAsync(word, "1");
 			}
 		}
 	}
