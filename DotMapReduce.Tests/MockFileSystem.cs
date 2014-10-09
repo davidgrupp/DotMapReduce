@@ -53,15 +53,15 @@ namespace DotMapReduce.Tests
 			fileService.Verify(fs => fs.ReadDocument(InputDirectory, It.IsAny<String>()), Times.Exactly(16 * 15));
 		}
 
-		public static Dictionary<String, List<String>> GetReducerData()
+		public static new IEnumerable<IGrouping<String, String>> GetReducerData()
 		{
-			Dictionary<String, List<String>> data = new Dictionary<String, List<String>>();
-			data.Add("This", Enumerable.Range(0, 240).Select(i => "1").ToList());
-			data.Add("is", Enumerable.Range(0, 240).Select(i => "1").ToList());
-			data.Add("document", Enumerable.Range(0, 240).Select(i => "1").ToList());
-			data.Add("one", Enumerable.Range(0, 80).Select(i => "1").ToList());
-			data.Add("two", Enumerable.Range(0, 80).Select(i => "1").ToList());
-			data.Add("three", Enumerable.Range(0, 80).Select(i => "1").ToList());
+			List<IMapGrouping<String, String>> data = new List<IMapGrouping<String, String>>();
+			data.Add(new MapGrouping<String, String>("This", Enumerable.Range(0, 240).Select(i => "1").ToList()));
+			data.Add(new MapGrouping<String, String>("is", Enumerable.Range(0, 240).Select(i => "1").ToList()));
+			data.Add(new MapGrouping<String, String>("document", Enumerable.Range(0, 240).Select(i => "1").ToList()));
+			data.Add(new MapGrouping<String, String>("one", Enumerable.Range(0, 80).Select(i => "1").ToList()));
+			data.Add(new MapGrouping<String, String>("two", Enumerable.Range(0, 80).Select(i => "1").ToList()));
+			data.Add(new MapGrouping<String, String>("three", Enumerable.Range(0, 80).Select(i => "1").ToList()));
 			return data;
 		}
 

@@ -14,10 +14,10 @@ namespace DotMapReduce.Threaded
 		public ThreadedMapperContext(Int32 totalWorkers)
 		{
 			_totalWorkers = totalWorkers;
-			_mapPartitions = new Dictionary<Int32, Dictionary<String, List<String>>>();
+			_mapPartitions = new Dictionary<Int32, SortedDictionary<String, IMapGrouping<String, String>>>();
 		}
 		private Int32 _totalWorkers;
-		private Dictionary<Int32, Dictionary<String, List<String>>> _mapPartitions;
+		private Dictionary<Int32, SortedDictionary<String, IMapGrouping<String, String>>> _mapPartitions;
 
 		public Task EmitAsync(String key, String value)
 		{
@@ -28,10 +28,10 @@ namespace DotMapReduce.Threaded
 				lock (_mapPartitions)
 				{
 					if (false == _mapPartitions.ContainsKey(partition))
-						_mapPartitions.Add(partition, new Dictionary<String, List<String>>());
+						_mapPartitions.Add(partition, new SortedDictionary<String, IMapGrouping<String, String>>());
 
 					if (false == _mapPartitions[partition].ContainsKey(key))
-						_mapPartitions[partition].Add(key, new List<String>());
+						_mapPartitions[partition].Add(key, new MapGrouping<String, String>(key, new List<String>()));
 
 					_mapPartitions[partition][key].Add(value);
 				}
@@ -48,12 +48,12 @@ namespace DotMapReduce.Threaded
 			throw new NotImplementedException();
 		}
 
-		public Dictionary<String, List<String>> GetPartitionedEmittedValues(Int32 partition)
+		public IEnumerable<IGrouping<String, String>> GetPartitionedEmittedValues(Int32 partition)
 		{
 			if (_mapPartitions.ContainsKey(partition))
-				return _mapPartitions[partition];
+				return _mapPartitions[partition].Values;
 			else
-				return new Dictionary<String, List<String>>();
+				return new List<IGrouping<String, String>>();
 		}
 
 	}

@@ -25,7 +25,7 @@ namespace DotMapReduce.Threaded
 			Manager = manager;
 			_mapper = mapper;
 			_reducer = reducer;
-			_workerKeyValues = new Dictionary<String, List<String>>();
+			_workerKeyValues = new List<IMapGrouping<String, String>>();
 		}
 		public Int32 WorkerId { get; set; }
 		public IMapperContext MapperContext { get; set; }
@@ -36,7 +36,8 @@ namespace DotMapReduce.Threaded
 		private IMapper _mapper;
 		private IReducer _reducer;
 		private Int32 _totalWorkers;
-		private Dictionary<String, List<String>> _workerKeyValues;
+		//private Dictionary<String, List<String>> _workerKeyValues;
+		private List<IMapGrouping<String, String>> _workerKeyValues;
 
 		public Task RunMapperBatchAsync(String inputDirectory, List<String> idsBatch)
 		{
@@ -54,24 +55,23 @@ namespace DotMapReduce.Threaded
 		{
 			return Task.Run(() =>
 			{
-				Parallel.ForEach(_workerKeyValues.Keys, key =>
+				Parallel.ForEach(_workerKeyValues, grouping =>
 				{
-					var values = _workerKeyValues[key];
-					//throw if values is empty
-					_reducer.Reduce(key, values, ReducerContext);
+					//TODO:throw if values is empty?
+					_reducer.Reduce(grouping.Key, grouping, ReducerContext);
 				});
 			});
 		}
 
 
-		public void SetExchangeData(Dictionary<String, List<String>> keyValues)
+		public void SetExchangeData(IEnumerable<IGrouping<String, String>> keyValueGroupings)
 		{
-			foreach (var key in keyValues.Keys)
+			foreach (var grouping in keyValueGroupings)
 			{
-				if (false == _workerKeyValues.ContainsKey(key))
-					_workerKeyValues.Add(key, new List<String>());
+				if (false == _workerKeyValues.Any(g => g.Key == grouping.Key))
+					_workerKeyValues.Add(new MapGrouping<String, String>(grouping.Key, new List<String>()));
 
-				_workerKeyValues[key].AddRange(keyValues[key]);
+				_workerKeyValues.First(g => g.Key == grouping.Key).AddRange(grouping);
 			}
 		}
 

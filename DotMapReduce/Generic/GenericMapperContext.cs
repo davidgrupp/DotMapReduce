@@ -39,7 +39,13 @@ namespace DotMapReduce.Generic
 			return _emittedValues[key];
 		}
 
-		public  Dictionary<String, List<String>> GetPartitionedEmittedValues(Int32 partition)
+		//public  Dictionary<String, List<String>> GetPartitionedEmittedValues(Int32 partition)
+		//{
+		//	throw new NotImplementedException();
+		//}
+
+
+		public IEnumerable<IGrouping<string, string>> GetPartitionedEmittedValues(int partition)
 		{
 			throw new NotImplementedException();
 		}

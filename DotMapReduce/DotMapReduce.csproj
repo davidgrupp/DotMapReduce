@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IMapGrouping.cs" />
     <Compile Include="Interfaces\IMapperContext.cs" />
     <Compile Include="Interfaces\IMapReduceFileService.cs" />
     <Compile Include="Interfaces\IMapper.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="Generic\GenericMapReduceRunner.cs" />
     <Compile Include="Interfaces\Parallelization\IMapReduceManager.cs" />
     <Compile Include="Interfaces\Parallelization\IMapReduceWorker.cs" />
+    <Compile Include="MapGrouping.cs" />
     <Compile Include="Threaded\ThreadedReducerContext.cs" />
     <Compile Include="Threaded\ThreadedMapperContext.cs" />
     <Compile Include="Threaded\ThreadedMapReduceManager.cs" />

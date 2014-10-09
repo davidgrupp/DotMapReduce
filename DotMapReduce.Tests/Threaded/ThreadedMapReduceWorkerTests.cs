@@ -49,9 +49,9 @@ namespace DotMapReduce.Tests.Threaded
 			var mapper = new WordCountMapper();
 
 			var otherWrkContext = new Mock<IMapperContext>();
-			otherWrkContext.Setup(c => c.GetPartitionedEmittedValues(3)).Returns(new Dictionary<String, List<String>>());
+			otherWrkContext.Setup(c => c.GetPartitionedEmittedValues(3)).Returns(new List<IGrouping<String, String>>());
 			var context = new Mock<IMapperContext>();
-			context.Setup(c => c.GetPartitionedEmittedValues(4)).Returns(new Dictionary<String, List<String>>());
+			context.Setup(c => c.GetPartitionedEmittedValues(4)).Returns(new List<IGrouping<String, String>>());
 
 			var otherWorker = new ThreadedMapReduceWorker(4, 10, _manager.Object, _fileService.Object, mapper, null, otherWrkContext.Object, null);
 
