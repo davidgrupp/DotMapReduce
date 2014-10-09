@@ -12,13 +12,13 @@ namespace DotMapReduce.Tests.Threaded
 	public class ThreadedMapperContextTests
 	{
 		[Test, Category("Unit")]
-		public void Threaded_Parition_Success()
+		public void Threaded_Partition_Success()
 		{
 			//Arrange
 			var context = new ThreadedMapperContext(10);
 			for (var i = 0; i < 100; i++)
 			{
-				context.EmitAsync(i.ToString(), "1");
+				context.EmitAsync(i.ToString(), "1").Wait();
 			}
 
 			//Act

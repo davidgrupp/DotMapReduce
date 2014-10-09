@@ -23,7 +23,7 @@ namespace DotMapReduce.Tests.Parallelization
 			var workers = Enumerable.Range(0, num).Select(i => new Mock<IMapReduceWorker>()).ToList();
 			foreach (var worker in workers)
 			{
-				worker.Setup(w => w.Exchange(It.IsAny<IMapReduceWorker>()))
+				worker.Setup(w => w.ExchangeKeyValues(It.IsAny<IMapReduceWorker>()))
 					.Callback(() => { lock (obj) { totalExchanges++; } });
 			}
 

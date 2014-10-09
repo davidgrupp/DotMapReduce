@@ -1,4 +1,5 @@
 ﻿using DotMapReduce.Interfaces.Parallelization;
+using DotMapReduce.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace DotMapReduce.Threaded
 
 		public void RunMappers(String inputDirectory, List<String> docIds)
 		{
+			ThrowOn.IsEmpty(Workers, "Workers empty. Cannot run mappers without workers.");
 			var mapperTasks = new List<Task>();
 
 			var docIdBatchSize = docIds.Count / Workers.Count;

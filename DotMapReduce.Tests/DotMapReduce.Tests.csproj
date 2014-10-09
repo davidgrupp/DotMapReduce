@@ -48,6 +48,7 @@
     <Compile Include="Generic\GenericRunnerTests.cs" />
     <Compile Include="MockFileSystem.cs" />
     <Compile Include="Threaded\ThreadedMapperContextTests.cs" />
+    <Compile Include="Threaded\ThreadedMapReduceManagerTests.cs" />
     <Compile Include="Threaded\ThreadedMapReduceRunnerTests.cs" />
     <Compile Include="Threaded\ThreadedMapReduceWorkerTests.cs" />
     <Compile Include="DataExchangerTests.cs" />

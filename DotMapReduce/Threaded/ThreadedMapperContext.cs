@@ -14,27 +14,26 @@ namespace DotMapReduce.Threaded
 		public ThreadedMapperContext(Int32 totalWorkers)
 		{
 			_totalWorkers = totalWorkers;
-			_mapPartitions = new Dictionary<Int32, List<Tuple<String, String>>>();
+			_mapPartitions = new Dictionary<Int32, Dictionary<String, List<String>>>();
 		}
 		private Int32 _totalWorkers;
-		private Dictionary<Int32, List<Tuple<String, String>>> _mapPartitions;
+		private Dictionary<Int32, Dictionary<String, List<String>>> _mapPartitions;
+
 		public Task EmitAsync(String key, String value)
 		{
 			return Task.Run(() =>
 			{
 				var partition = PartitionUtilities.GetPartition(key, _totalWorkers);
-				
+
 				lock (_mapPartitions)
 				{
-					if (_mapPartitions.ContainsKey(partition))
-					{
-						_mapPartitions[partition].Add(new Tuple<String, String>(key, value));
-					}
-					else
-					{
-						_mapPartitions.Add(partition, new List<Tuple<String, String>>());
-						_mapPartitions[partition].Add(new Tuple<String, String>(key, value));
-					}
+					if (false == _mapPartitions.ContainsKey(partition))
+						_mapPartitions.Add(partition, new Dictionary<String, List<String>>());
+
+					if (false == _mapPartitions[partition].ContainsKey(key))
+						_mapPartitions[partition].Add(key, new List<String>());
+
+					_mapPartitions[partition][key].Add(value);
 				}
 			});
 		}
@@ -49,10 +48,13 @@ namespace DotMapReduce.Threaded
 			throw new NotImplementedException();
 		}
 
-		public List<Tuple<String, String>> GetPartitionedEmittedValues(Int32 partition)
+		public Dictionary<String, List<String>> GetPartitionedEmittedValues(Int32 partition)
 		{
-			return _mapPartitions[partition];
+			if (_mapPartitions.ContainsKey(partition))
+				return _mapPartitions[partition];
+			else
+				return new Dictionary<String, List<String>>();
 		}
-		
+
 	}
 }

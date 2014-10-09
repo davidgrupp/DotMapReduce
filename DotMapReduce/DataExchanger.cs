@@ -58,7 +58,7 @@ namespace DotMapReduce.Parallelization
 				//Thread.Sleep(10);
 				var worker1 = _workers[w1];
 				var worker2 = _workers[w2];
-				worker1.Exchange(worker2);
+				worker1.ExchangeKeyValues(worker2);
 			});
 		}
 

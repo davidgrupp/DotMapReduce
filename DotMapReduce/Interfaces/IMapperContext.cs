@@ -14,6 +14,6 @@ namespace DotMapReduce.Interfaces
 
 		List<String> GetEmittedValues(String key);
 
-		List<Tuple<String, String>> GetPartitionedEmittedValues(Int32 partition);
+		Dictionary<String, List<String>> GetPartitionedEmittedValues(Int32 partition);
 	}
 }

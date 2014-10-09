@@ -29,17 +29,17 @@ namespace DotMapReduce.Generic
 			});
 		}
 
-		public List<string> GetEmittedKeys()
+		public List<String> GetEmittedKeys()
 		{
 			return _emittedValues.Keys.ToList();
 		}
 
-		public List<string> GetEmittedValues(string key)
+		public List<String> GetEmittedValues(String key)
 		{
 			return _emittedValues[key];
 		}
 
-		public List<Tuple<string, string>> GetPartitionedEmittedValues(int partition)
+		public  Dictionary<String, List<String>> GetPartitionedEmittedValues(Int32 partition)
 		{
 			throw new NotImplementedException();
 		}

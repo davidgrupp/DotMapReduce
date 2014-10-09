@@ -11,26 +11,31 @@ namespace DotMapReduce.Threaded
 	public class ThreadedMapReduceWorker : IMapReduceWorker
 	{
 		public ThreadedMapReduceWorker(Int32 workerId, Int32 totalWorkers, IMapReduceManager manager, IMapReduceFileService _fileService, IMapper _mapper)
-			: this(workerId, manager, _fileService, _mapper, new ThreadedMapperContext(totalWorkers), new ThreadedReducerContext())
+			: this(workerId, totalWorkers, manager, _fileService, _mapper, new ThreadedMapperContext(totalWorkers), new ThreadedReducerContext())
 		{
 
 		}
-		public ThreadedMapReduceWorker(Int32 workerId, IMapReduceManager manager, IMapReduceFileService fileService, IMapper mapper, IMapperContext mapContext, IReducerContext rdcContext)
+		public ThreadedMapReduceWorker(Int32 workerId, Int32 totalWorkers, IMapReduceManager manager, IMapReduceFileService fileService, IMapper mapper, IMapperContext mapContext, IReducerContext rdcContext)
 		{
 			WorkerId = workerId;
+			_totalWorkers = totalWorkers;
 			MapperContext = mapContext;
 			ReducerContext = rdcContext;
 			_fileService = fileService;
 			Manager = manager;
 			_mapper = mapper;
+			_workerKeyValues = new Dictionary<String, List<String>>();
 		}
 		public Int32 WorkerId { get; set; }
 		public IMapperContext MapperContext { get; set; }
 		public IReducerContext ReducerContext { get; set; }
 		public IMapReduceManager Manager { get; set; }
+
 		private IMapReduceFileService _fileService;
 		private IMapper _mapper;
-
+		private IReducer _reducer;
+		private Int32 _totalWorkers;
+		private Dictionary<String, List<String>> _workerKeyValues;
 
 		public Task RunMapperBatchAsync(String inputDirectory, List<String> idsBatch)
 		{
@@ -49,27 +54,38 @@ namespace DotMapReduce.Threaded
 			throw new NotImplementedException();
 		}
 
-		private void RunReducerBatch(String inputDirectory, List<String> keyBatch)
+		private Task RunReducerBatch(String inputDirectory, List<String> keyBatch)
 		{
+			return Task.Run(() =>
+			{
+				Parallel.ForEach(_workerKeyValues.Keys, key =>
+				{
+					var values = _workerKeyValues[key];
+					//throw if values is empty
+					_reducer.Reduce(key, values, ReducerContext);
+				});
+			});
 		}
 
 
-		public void Exchange(IMapReduceWorker worker)
+		public void SetExchangeData(Dictionary<String, List<String>> keyValues)
 		{
+			foreach (var key in keyValues.Keys)
+			{
+				if (false == _workerKeyValues.ContainsKey(key))
+					_workerKeyValues.Add(key, new List<String>());
 
+				_workerKeyValues[key].AddRange(keyValues[key]);
+			}
 		}
 
-
-		public List<String> ExchangeKeyValues(List<String> values, IMapReduceWorker otherWorker)
+		public void ExchangeKeyValues(IMapReduceWorker otherWorker)
 		{
-			var otherWorkersData = new List<String>(); //otherWorker.WorkerId
 			var _otherWorkersData = MapperContext.GetPartitionedEmittedValues(otherWorker.WorkerId);
+			otherWorker.SetExchangeData(_otherWorkersData);
 
-			var myData = new List<String>();
 			var currentWorkersData = otherWorker.MapperContext.GetPartitionedEmittedValues(this.WorkerId);
-			myData.AddRange(values);
-
-			return otherWorkersData;
+			this.SetExchangeData(currentWorkersData);
 		}
 	}
 }
