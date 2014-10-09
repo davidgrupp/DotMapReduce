@@ -1,6 +1,6 @@
 ﻿using DotMapReduce.Interfaces;
 using DotMapReduce.Interfaces.Parallelization;
-using DotMapReduce.Parallelization.Threaded;
+using DotMapReduce.Threaded;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotMapReduce.Tests.Parallelization.Threaded
+namespace DotMapReduce.Tests.Threaded
 {
 	[TestFixture]
 	public class ThreadedMapReduceRunnerTests

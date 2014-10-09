@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotMapReduce.Parallelization.Threaded
+namespace DotMapReduce.Threaded
 {
 	public class ThreadedMapReduceRunner : IMapReduceRunner
 	{

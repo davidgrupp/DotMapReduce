@@ -1,4 +1,4 @@
-﻿using DotMapReduce.Parallelization.Threaded;
+﻿using DotMapReduce.Threaded;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotMapReduce.Tests.Parallelization.Threaded
+namespace DotMapReduce.Tests.Threaded
 {
 	[TestFixture, Category("Core"), Category("Threaded")]
 	public class ThreadedMapperContextTests
