@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DotMapReduce.Interfaces.Parallelization
 {
-	public interface IWorkerExchanger
+	public interface IDataExchanger
 	{
 		void ExchangeData(List<IMapReduceWorker> workers);
 	}

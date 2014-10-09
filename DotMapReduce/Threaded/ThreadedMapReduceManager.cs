@@ -9,13 +9,13 @@ namespace DotMapReduce.Threaded
 {
 	public class ThreadedMapReduceManager : IMapReduceManager
 	{
-		public ThreadedMapReduceManager(IWorkerExchanger workerExchange)
+		public ThreadedMapReduceManager(IDataExchanger workerExchange)
 		{
 			_workerExchange = workerExchange;
 			Workers = new List<IMapReduceWorker>();
 		}
 
-		private IWorkerExchanger _workerExchange;
+		private IDataExchanger _workerExchange;
 
 		public List<IMapReduceWorker> Workers { get; private set; }
 

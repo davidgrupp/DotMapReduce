@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DotMapReduce.Tests.Threaded
 {
-	[TestFixture]
+	[TestFixture, Category("Core"), Category("Threaded")]
 	public class ThreadedMapReduceWorkerTests
 	{
 		[SetUp]

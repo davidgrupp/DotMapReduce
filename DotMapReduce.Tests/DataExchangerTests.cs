@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace DotMapReduce.Tests.Parallelization
 {
 	[TestFixture, Category("Core")]
-	public class WorkerExchangerTests
+	public class DataExchangerTests
 	{
 		[Test, Category("Unit")]
 		public void GetExchanges()
@@ -28,7 +28,7 @@ namespace DotMapReduce.Tests.Parallelization
 			}
 
 			//Act
-			var exhngr = new WorkerExchanger();
+			var exhngr = new DataExchanger();
 			exhngr.ExchangeData(workers.Select(w => w.Object).ToList());
 
 			//Assert

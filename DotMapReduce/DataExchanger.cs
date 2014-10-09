@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DotMapReduce.Parallelization
 {
-	public class WorkerExchanger : IWorkerExchanger
+	public class DataExchanger : IDataExchanger
 	{
 		private List<IMapReduceWorker> _workers = null;
 

@@ -45,7 +45,7 @@
     <Compile Include="Interfaces\IMapReduceReducer.cs" />
     <Compile Include="Interfaces\IMapReduceRunner.cs" />
     <Compile Include="Interfaces\IReducerContext.cs" />
-    <Compile Include="Interfaces\Parallelization\IWorkerExchanger.cs" />
+    <Compile Include="Interfaces\Parallelization\IDataExchanger.cs" />
     <Compile Include="Generic\GenericMapperContext.cs" />
     <Compile Include="Generic\GenericMapReduceRunner.cs" />
     <Compile Include="Interfaces\Parallelization\IMapReduceManager.cs" />
@@ -55,7 +55,7 @@
     <Compile Include="Threaded\ThreadedMapReduceManager.cs" />
     <Compile Include="Threaded\ThreadedMapReduceWorker.cs" />
     <Compile Include="Threaded\ThreadedMapReduceRunner.cs" />
-    <Compile Include="WorkerExchanger.cs" />
+    <Compile Include="DataExchanger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Generic\GenericReducerContext.cs" />
     <Compile Include="Utilities\PartitionUtilities.cs" />

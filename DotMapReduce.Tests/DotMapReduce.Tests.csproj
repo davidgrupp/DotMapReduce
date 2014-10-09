@@ -45,12 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MapReduceRunnerTests.cs" />
+    <Compile Include="Generic\MapReduceRunnerTests.cs" />
     <Compile Include="MockFileSystem.cs" />
     <Compile Include="Threaded\ThreadedMapperContextTests.cs" />
     <Compile Include="Threaded\ThreadedMapReduceRunnerTests.cs" />
     <Compile Include="Threaded\ThreadedMapReduceWorkerTests.cs" />
-    <Compile Include="WorkerExchangerTests.cs" />
+    <Compile Include="DataExchangerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WordCountMapper.cs" />
     <Compile Include="WordCountReducer.cs" />
