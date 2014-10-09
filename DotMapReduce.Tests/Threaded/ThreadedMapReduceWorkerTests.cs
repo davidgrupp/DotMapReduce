@@ -69,6 +69,7 @@ namespace DotMapReduce.Tests.Threaded
 			//Arrange
 			var keys = MockFileSystem.GetKeys();
 			var reducer = new WordCountReducer();
+			MockFileSystem.SetupReducers(_fileService);
 			var data = MockFileSystem.GetReducerData();
 
 			var worker = new ThreadedMapReduceWorker(3, 10, _manager.Object, _fileService.Object, null, reducer);

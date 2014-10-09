@@ -65,6 +65,16 @@ namespace DotMapReduce.Tests
 			return data;
 		}
 
+		public static void SetupReducers(Mock<IMapReduceFileService> fileService)
+		{
+			fileService.Setup(fs => fs.WriteToDocument(It.IsAny<String>(), "This: 240"));
+			fileService.Setup(fs => fs.WriteToDocument(It.IsAny<String>(), "is: 240"));
+			fileService.Setup(fs => fs.WriteToDocument(It.IsAny<String>(), "document: 240"));
+			fileService.Setup(fs => fs.WriteToDocument(It.IsAny<String>(), "one: 80"));
+			fileService.Setup(fs => fs.WriteToDocument(It.IsAny<String>(), "two: 80"));
+			fileService.Setup(fs => fs.WriteToDocument(It.IsAny<String>(), "three: 80"));
+		}
+
 		public static void VerifyReducers(Mock<IMapReduceFileService> fileService)
 		{
 			fileService.Verify(fs => fs.WriteToDocument(It.IsAny<String>(), "This: 240"));
