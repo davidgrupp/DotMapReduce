@@ -10,15 +10,15 @@ namespace DotMapReduce.Threaded
 {
 	public class ThreadedMapReduceRunner : IMapReduceRunner
 	{
-		public ThreadedMapReduceRunner(IMapReduceMapper mapper, IMapReduceReducer reducer, IMapReduceFileService fileService, IDataExchanger workerExchange)
+		public ThreadedMapReduceRunner(IMapper mapper, IReducer reducer, IMapReduceFileService fileService, IDataExchanger workerExchange)
 		{
 			_mapper = mapper;
 			_reducer = reducer;
 			_fileService = fileService;
 			_workerExchange = workerExchange;
 		}
-		private IMapReduceMapper _mapper;
-		private IMapReduceReducer _reducer;
+		private IMapper _mapper;
+		private IReducer _reducer;
 		private IMapReduceFileService _fileService;
 		private IDataExchanger _workerExchange;
 

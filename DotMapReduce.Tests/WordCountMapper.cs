@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DotMapReduce.Tests
 {
-	public class WordCountMapper : IMapReduceMapper
+	public class WordCountMapper : IMapper
 	{
 		public void Map(string inputValue, IMapperContext context)
 		{

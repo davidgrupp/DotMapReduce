@@ -10,12 +10,12 @@ namespace DotMapReduce.Threaded
 {
 	public class ThreadedMapReduceWorker : IMapReduceWorker
 	{
-		public ThreadedMapReduceWorker(Int32 workerId, Int32 totalWorkers, IMapReduceManager manager, IMapReduceFileService _fileService, IMapReduceMapper _mapper)
+		public ThreadedMapReduceWorker(Int32 workerId, Int32 totalWorkers, IMapReduceManager manager, IMapReduceFileService _fileService, IMapper _mapper)
 			: this(workerId, manager, _fileService, _mapper, new ThreadedMapperContext(totalWorkers), new ThreadedReducerContext())
 		{
 
 		}
-		public ThreadedMapReduceWorker(Int32 workerId, IMapReduceManager manager, IMapReduceFileService fileService, IMapReduceMapper mapper, IMapperContext mapContext, IReducerContext rdcContext)
+		public ThreadedMapReduceWorker(Int32 workerId, IMapReduceManager manager, IMapReduceFileService fileService, IMapper mapper, IMapperContext mapContext, IReducerContext rdcContext)
 		{
 			WorkerId = workerId;
 			MapperContext = mapContext;
@@ -29,7 +29,7 @@ namespace DotMapReduce.Threaded
 		public IReducerContext ReducerContext { get; set; }
 		public IMapReduceManager Manager { get; set; }
 		private IMapReduceFileService _fileService;
-		private IMapReduceMapper _mapper;
+		private IMapper _mapper;
 
 
 		public Task RunMapperBatchAsync(String inputDirectory, List<String> idsBatch)

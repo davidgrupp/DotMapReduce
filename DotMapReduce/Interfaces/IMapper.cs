@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace DotMapReduce.Interfaces
 {
-	public interface IMapReduceMapper
+	public interface IMapper
 	{
 		void Map(String inputValue, IMapperContext context);
-		//Task MapAsync(String inputValue, IMapReduceContext context);
 	}
 }

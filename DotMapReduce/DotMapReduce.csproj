@@ -41,8 +41,9 @@
   <ItemGroup>
     <Compile Include="Interfaces\IMapperContext.cs" />
     <Compile Include="Interfaces\IMapReduceFileService.cs" />
-    <Compile Include="Interfaces\IMapReduceMapper.cs" />
-    <Compile Include="Interfaces\IMapReduceReducer.cs" />
+    <Compile Include="Interfaces\IMapper.cs" />
+    <Compile Include="Interfaces\IMapReduceProgress.cs" />
+    <Compile Include="Interfaces\IReducer.cs" />
     <Compile Include="Interfaces\IMapReduceRunner.cs" />
     <Compile Include="Interfaces\IReducerContext.cs" />
     <Compile Include="Interfaces\Parallelization\IDataExchanger.cs" />

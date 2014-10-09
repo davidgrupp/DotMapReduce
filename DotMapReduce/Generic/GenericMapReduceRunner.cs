@@ -9,14 +9,14 @@ namespace DotMapReduce.Generic
 {
 	public class GenericMapReduceRunner : IMapReduceRunner
 	{
-		public GenericMapReduceRunner(IMapReduceMapper mapper, IMapReduceReducer reducer, IMapReduceFileService fileService)
+		public GenericMapReduceRunner(IMapper mapper, IReducer reducer, IMapReduceFileService fileService)
 		{
 			_mapper = mapper;
 			_reducer = reducer;
 			_fileService = fileService;
 		}
-		private IMapReduceMapper _mapper;
-		private IMapReduceReducer _reducer;
+		private IMapper _mapper;
+		private IReducer _reducer;
 		private IMapReduceFileService _fileService;
 
 		public void Run(String inputDirectory, String outputDirectory)
