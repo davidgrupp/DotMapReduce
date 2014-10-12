@@ -68,6 +68,8 @@ namespace DotMapReduce.Tests.Threaded
 		{
 			//Arrange
 			var keys = MockFileSystem.GetKeys();
+			var outputDir = MockFileSystem.OutputDirectory;
+			var outputFile = "jobresults";
 			var reducer = new WordCountReducer();
 			var reducerContext = new Mock<IReducerContext>();
 			MockFileSystem.SetupReducers(reducerContext);
@@ -77,10 +79,31 @@ namespace DotMapReduce.Tests.Threaded
 			worker.SetReducerData(data);
 
 			//Act
-			worker.RunReducersAsync().Wait();
+			worker.RunReducersAsync(outputDir, outputFile).Wait();
 
 			//Assert
 			MockFileSystem.VerifyReducers(reducerContext);
+		}
+
+		[Test, Category("Unit")]
+		public void Threaded_RunReducersSaveResults_Success()
+		{
+			//Arrange
+			var keys = MockFileSystem.GetKeys();
+			var outputDir = MockFileSystem.OutputDirectory;
+			var outputFile = "jobresults";
+			var reducer = new WordCountReducer();
+			var reducerContext = new ThreadedReducerContext();
+			var data = MockFileSystem.GetReducerData();
+
+			var worker = new ThreadedMapReduceWorker(3, 10, _manager.Object, _fileService.Object, null, reducer, null, reducerContext);
+			worker.SetReducerData(data);
+
+			//Act
+			worker.RunReducersAsync(outputDir, outputFile).Wait();
+
+			//Assert
+			MockFileSystem.VerifySavedReducerResults(_fileService);
 		}
 	}
 }

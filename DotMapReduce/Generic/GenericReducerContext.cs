@@ -9,20 +9,27 @@ namespace DotMapReduce.Generic
 {
 	public class GenericReducerContext : IReducerContext
 	{
-		private Dictionary<String, String> _emittedAggergateValues = new Dictionary<String, String>();
-		public void EmitKeyValue(String key, String value)
+		protected Dictionary<String, String> _emittedAggergateValues = new Dictionary<String, String>();
+		
+		public virtual void EmitKeyValue(String key, String value)
 		{
 			_emittedAggergateValues.Add(key, value);
 		}
 
-		public List<String> GetKeys()
+		public virtual List<String> GetKeys()
 		{
 			return _emittedAggergateValues.Keys.ToList();
 		}
 
-		public String GetValue(String key)
+		public virtual String GetValue(String key)
 		{
 			return _emittedAggergateValues[key];
+		}
+
+
+		public virtual string GetNextKey()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

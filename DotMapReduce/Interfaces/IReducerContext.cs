@@ -13,5 +13,7 @@ namespace DotMapReduce.Interfaces
 		List<String> GetKeys();
 
 		String GetValue(String key);
+
+		String GetNextKey();
 	}
 }

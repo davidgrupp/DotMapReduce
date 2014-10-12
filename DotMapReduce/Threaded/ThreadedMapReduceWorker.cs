@@ -36,7 +36,6 @@ namespace DotMapReduce.Threaded
 		private IMapper _mapper;
 		private IReducer _reducer;
 		private Int32 _totalWorkers;
-		//private Dictionary<String, List<String>> _workerKeyValues;
 		private List<IMapGrouping<String, String>> _workerKeyValues;
 
 		public Task RunMapperBatchAsync(String inputDirectory, List<String> idsBatch)
@@ -53,15 +52,23 @@ namespace DotMapReduce.Threaded
 			});
 		}
 
-		public Task RunReducersAsync()
+		public Task RunReducersAsync(String outputDirectory, String outputFile)
 		{
 			return Task.Run(() =>
 			{
+				var saveResultTasks = new List<Task>();
 				Parallel.ForEach(_workerKeyValues, grouping =>
 				{
 					//TODO:throw if values is empty?
 					_reducer.Reduce(grouping.Key, grouping, ReducerContext);
+					//save last results
+					lock (saveResultTasks)
+					{
+						saveResultTasks.Add(SaveLastReducerResult(outputDirectory, outputFile));
+					}
 				});
+
+				Task.WaitAll(saveResultTasks.ToArray());
 			});
 		}
 
@@ -83,6 +90,19 @@ namespace DotMapReduce.Threaded
 
 			var currentWorkersData = otherWorker.MapperContext.GetPartitionedEmittedValues(this.WorkerId);
 			this.SetReducerData(currentWorkersData);
+		}
+
+		private Task SaveLastReducerResult(String outputDirectory, String outputFile)
+		{
+			return Task.Run(() =>
+			{
+				var nextKey = ReducerContext.GetNextKey();
+				if (null != nextKey)
+				{
+					var value = ReducerContext.GetValue(nextKey);
+					_fileService.WriteToDocument(outputFile, String.Format("{0}: {1}", nextKey, value));
+				}
+			});
 		}
 	}
 }

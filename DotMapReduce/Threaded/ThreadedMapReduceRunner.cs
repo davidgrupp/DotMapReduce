@@ -47,17 +47,7 @@ namespace DotMapReduce.Threaded
 			_manager.Exchange();
 
 			//run the reducers
-			//var keys = CombineKeys(_mapperContexts);
-			//var keyBatch = new List<String>();
-			//var keyBatchSize = Math.Min(Math.Log(keys.Count), 100);
-			//for (var i = 0; i < keys.Count; i++)
-			//{
-			//	keyBatch.Add(keys[i]);
-			//	if (keys.Count >= keyBatchSize || i + 1 == keys.Count)
-			//	{
-			//		RunReducerBatch(inputDirectory, new List<String>());
-			//	}
-			//}
+			//_manager.r
 
 			////save the results
 			//SaveReducerResults(outputDirectory);
@@ -65,21 +55,7 @@ namespace DotMapReduce.Threaded
 
 
 
-		//private void RunReducerBatch(String inputDirectory, List<String> keyBatch)
-		//{
-		//	var reducerContext = new MapReduceContext();
-		//	_reducerContexts.Add(reducerContext);
 
-		//	foreach (var key in keyBatch)
-		//	{
-		//		var allValues = new List<String>();
-		//		foreach (var context in _mapperContexts)
-		//		{
-		//			allValues.AddRange(context.GetEmittedValues(key));
-		//		}
-		//		_reducer.Reduce(key, allValues, reducerContext);
-		//	}
-		//}
 
 		//private void SaveReducerResults(String outputDirectory)
 		//{

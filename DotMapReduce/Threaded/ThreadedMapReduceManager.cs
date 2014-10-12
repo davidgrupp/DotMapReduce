@@ -35,22 +35,22 @@ namespace DotMapReduce.Threaded
 			Task.WaitAll(mapperTasks.ToArray());
 		}
 
-		public void RunReducers()
+		public void RunReducers(String outputDirectory, String outputFile)
 		{
+			var reducerTasks = new List<Task>();
 
+			foreach (var worker in Workers)
+			{
+				reducerTasks.Add(worker.RunReducersAsync(outputDirectory, outputFile));
+			}
+
+			Task.WaitAll(reducerTasks.ToArray());
 		}
 
 		public void Exchange()
 		{
-			//set the workers own data first
-			
-			//exchange data
 			_workerExchange.ExchangeData(Workers);
 		}
 
-		public void SaveResults()
-		{
-
-		}
 	}
 }

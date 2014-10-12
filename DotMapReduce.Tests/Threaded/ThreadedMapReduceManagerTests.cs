@@ -54,5 +54,25 @@ namespace DotMapReduce.Tests.Threaded
 			//Assert
 
 		}
+
+		[Test, Category("Unit")]
+		public void Threaded_RunReducers_Success()
+		{
+			//Arrange
+			var keys = MockFileSystem.GetKeys();
+			var worker = new Mock<IMapReduceWorker>();
+			var outputDir = MockFileSystem.OutputDirectory;
+			var outputFile = "jobresults";
+			worker.Setup(w => w.RunReducersAsync(outputDir, outputFile)).Returns(Task.Delay(2000));
+			var workers = new List<IMapReduceWorker>() { worker.Object };
+			var manager = new ThreadedMapReduceManager(_dataExchanger.Object);
+			manager.Workers.AddRange(workers);
+
+			//Act
+			manager.RunReducers(outputDir, outputFile);
+
+			//Assert
+			worker.Verify(w => w.RunReducersAsync(outputDir, outputFile));
+		}
 	}
 }

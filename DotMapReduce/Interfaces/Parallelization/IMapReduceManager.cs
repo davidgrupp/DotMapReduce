@@ -11,5 +11,6 @@ namespace DotMapReduce.Interfaces.Parallelization
 		List<IMapReduceWorker> Workers { get; }
 		void RunMappers(String inputDirectory, List<String> docIds);
 		void Exchange();
+		void RunReducers(String outputDirectory, String outputFile);
 	}
 }
