@@ -48,6 +48,8 @@ namespace DotMapReduce.Threaded
 					var inputValue = _fileService.ReadDocument(inputDirectory, docId);
 					_mapper.Map(inputValue, MapperContext);
 				});
+
+				SetReducerData(MapperContext.GetPartitionedEmittedValues(this.WorkerId));
 			});
 		}
 
@@ -63,8 +65,7 @@ namespace DotMapReduce.Threaded
 			});
 		}
 
-
-		public void SetExchangeData(IEnumerable<IGrouping<String, String>> keyValueGroupings)
+		public void SetReducerData(IEnumerable<IGrouping<String, String>> keyValueGroupings)
 		{
 			foreach (var grouping in keyValueGroupings)
 			{
@@ -78,10 +79,10 @@ namespace DotMapReduce.Threaded
 		public void ExchangeKeyValues(IMapReduceWorker otherWorker)
 		{
 			var _otherWorkersData = MapperContext.GetPartitionedEmittedValues(otherWorker.WorkerId);
-			otherWorker.SetExchangeData(_otherWorkersData);
+			otherWorker.SetReducerData(_otherWorkersData);
 
 			var currentWorkersData = otherWorker.MapperContext.GetPartitionedEmittedValues(this.WorkerId);
-			this.SetExchangeData(currentWorkersData);
+			this.SetReducerData(currentWorkersData);
 		}
 	}
 }

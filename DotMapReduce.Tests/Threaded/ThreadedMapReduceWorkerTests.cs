@@ -74,7 +74,7 @@ namespace DotMapReduce.Tests.Threaded
 			var data = MockFileSystem.GetReducerData();
 
 			var worker = new ThreadedMapReduceWorker(3, 10, _manager.Object, _fileService.Object, null, reducer, null, reducerContext.Object);
-			worker.SetExchangeData(data);
+			worker.SetReducerData(data);
 
 			//Act
 			worker.RunReducersAsync().Wait();

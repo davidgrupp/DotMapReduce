@@ -16,7 +16,7 @@ namespace DotMapReduce.Interfaces.Parallelization
 		//void RunMapperBatch(String inputDirectory, List<String> idsBatch);
 		Task RunMapperBatchAsync(String inputDirectory, List<String> idsBatch);
 		Task RunReducersAsync();
-		void SetExchangeData(IEnumerable<IGrouping<String, String>> keyValueGroupings);
+		void SetReducerData(IEnumerable<IGrouping<String, String>> keyValueGroupings);
 		void ExchangeKeyValues(IMapReduceWorker otherWorker);
 	}
 }
