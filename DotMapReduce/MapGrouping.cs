@@ -43,7 +43,8 @@ namespace DotMapReduce
 
 		public void AddRange(IEnumerable<TElement> items)
 		{
-			_elements.AddRange(items);
+			if (items.Any())
+				_elements.AddRange(items);
 		}
 
 

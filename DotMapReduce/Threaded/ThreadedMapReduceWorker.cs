@@ -56,19 +56,14 @@ namespace DotMapReduce.Threaded
 		{
 			return Task.Run(() =>
 			{
-				var saveResultTasks = new List<Task>();
 				Parallel.ForEach(_workerKeyValues, grouping =>
 				{
 					//TODO:throw if values is empty?
 					_reducer.Reduce(grouping.Key, grouping, ReducerContext);
 					//save last results
-					lock (saveResultTasks)
-					{
-						saveResultTasks.Add(SaveLastReducerResult(outputDirectory, outputFile));
-					}
+					SaveLastReducerResult(outputDirectory, outputFile);
 				});
-
-				Task.WaitAll(saveResultTasks.ToArray());
+				SaveRemainingReducerResults(outputDirectory, outputFile);
 			});
 		}
 
@@ -79,7 +74,8 @@ namespace DotMapReduce.Threaded
 				if (false == _workerKeyValues.Any(g => g.Key == grouping.Key))
 					_workerKeyValues.Add(new MapGrouping<String, String>(grouping.Key, new List<String>()));
 
-				_workerKeyValues.First(g => g.Key == grouping.Key).AddRange(grouping);
+				if (grouping.Any())
+					_workerKeyValues.First(g => g.Key == grouping.Key).AddRange(grouping);
 			}
 		}
 
@@ -92,17 +88,24 @@ namespace DotMapReduce.Threaded
 			this.SetReducerData(currentWorkersData);
 		}
 
-		private Task SaveLastReducerResult(String outputDirectory, String outputFile)
+		private void SaveLastReducerResult(String outputDirectory, String outputFile)
 		{
-			return Task.Run(() =>
+			var nextKey = ReducerContext.GetNextKey();
+			if (null != nextKey)
 			{
-				var nextKey = ReducerContext.GetNextKey();
-				if (null != nextKey)
-				{
-					var value = ReducerContext.GetValue(nextKey);
-					_fileService.WriteToDocument(outputFile, String.Format("{0}: {1}", nextKey, value));
-				}
-			});
+				var value = ReducerContext.GetValue(nextKey);
+				_fileService.WriteToDocument(outputFile, String.Format("{0}: {1}", nextKey, value));
+			}
+		}
+
+		private void SaveRemainingReducerResults(String outputDirectory, String outputFile)
+		{
+			String nextKey;
+			if (null != (nextKey = ReducerContext.GetNextKey()))
+			{
+				var value = ReducerContext.GetValue(nextKey);
+				_fileService.WriteToDocument(outputFile, String.Format("{0}: {1}", nextKey, value));
+			}
 		}
 	}
 }

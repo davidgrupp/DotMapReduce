@@ -58,10 +58,13 @@ namespace DotMapReduce.Threaded
 
 		public IEnumerable<IGrouping<String, String>> GetPartitionedEmittedValues(Int32 partition)
 		{
-			if (_mapPartitions.Count() > partition)
-				return _mapPartitions[partition].Values;
-			else
-				return new List<IGrouping<String, String>>();
+			lock (_mapPartitions)
+			{
+				if (_mapPartitions.Count() > partition)
+					return _mapPartitions[partition].Values;
+				else
+					return new List<IGrouping<String, String>>();
+			}
 		}
 
 	}

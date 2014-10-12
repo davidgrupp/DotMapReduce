@@ -16,7 +16,10 @@ namespace DotMapReduce.Threaded
 		public override void EmitKeyValue(String key, String value)
 		{
 			base.EmitKeyValue(key, value);
-			_emittedKeys.Enqueue(key);
+			lock (_emittedKeys)
+			{
+				_emittedKeys.Enqueue(key);
+			}
 		}
 
 		public override String GetNextKey()

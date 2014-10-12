@@ -13,7 +13,10 @@ namespace DotMapReduce.Generic
 		
 		public virtual void EmitKeyValue(String key, String value)
 		{
-			_emittedAggergateValues.Add(key, value);
+			lock (_emittedAggergateValues)
+			{
+				_emittedAggergateValues.Add(key, value);
+			}
 		}
 
 		public virtual List<String> GetKeys()
