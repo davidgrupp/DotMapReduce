@@ -10,17 +10,17 @@ namespace DotMapReduce.Threaded
 {
 	public class ThreadedMapReduceRunner : IMapReduceRunner
 	{
-		public ThreadedMapReduceRunner(IMapper mapper, IReducer reducer, IMapReduceFileService fileService, IDataExchanger workerExchange)
+		public ThreadedMapReduceRunner(IMapper mapper, IReducer reducer, IMapReduceFileService fileService, IDataExchanger workerdataExchange)
 		{
 			_mapper = mapper;
 			_reducer = reducer;
 			_fileService = fileService;
-			_workerExchange = workerExchange;
+			_workerdataExchange = workerdataExchange;
 		}
 		private IMapper _mapper;
 		private IReducer _reducer;
 		private IMapReduceFileService _fileService;
-		private IDataExchanger _workerExchange;
+		private IDataExchanger _workerdataExchange;
 
 		private List<IMapReduceWorker> _workers;
 		private List<IMapReduceManager> _managers;
@@ -30,15 +30,16 @@ namespace DotMapReduce.Threaded
 			_workers = new List<IMapReduceWorker>();
 			_managers = new List<IMapReduceManager>();
 
-			_managers.Add(new ThreadedMapReduceManager(_workerExchange));
-
+			//get managers and workers
+			_managers.Add(new ThreadedMapReduceManager(_workerdataExchange));
 			var _manager = _managers.First();
 
 			var numOfWorkers = 8;
-			_manager.Workers.AddRange(Enumerable.Range(0, numOfWorkers).Select(i => new ThreadedMapReduceWorker(i, numOfWorkers, _manager, _fileService, _mapper, _reducer)));
+			_workers = Enumerable.Range(0, numOfWorkers).Select(i => new ThreadedMapReduceWorker(i, numOfWorkers, _manager, _fileService, _mapper, _reducer) as IMapReduceWorker).ToList();
+			_manager.Workers.AddRange(_workers);
 
 			//read the doc ids
-			List<String> docIds = _fileService.ReadDocumentIds(inputDirectory); // eventual stream these
+			List<String> docIds = _fileService.ReadDocumentIds(inputDirectory); // eventualy stream these
 
 			//run the mappers
 			_manager.RunMappers(inputDirectory, docIds);
@@ -47,31 +48,14 @@ namespace DotMapReduce.Threaded
 			_manager.Exchange();
 
 			//run the reducers
-			//_manager.r
+			var docName = String.Format("Job{0:MM_dd_yy_hhmm}.txt", DateTime.Now);
+			_manager.RunReducers(outputDirectory, docName);
 
-			////save the results
-			//SaveReducerResults(outputDirectory);
 		}
 
 
 
 
-
-		//private void SaveReducerResults(String outputDirectory)
-		//{
-		//	_fileService.CreateDirectory(outputDirectory);
-		//	var docName = String.Format("Job{0:MM_dd_yy_hhmm}.txt", DateTime.Now);
-		//	_fileService.CreateDocument(outputDirectory, docName);
-		//	foreach (var context in _reducerContexts)
-		//	{
-		//		var contextKeys = context.GetAggergateKeys();
-		//		foreach (var key in contextKeys)
-		//		{
-		//			var value = context.GetAggergateValue(key);
-		//			_fileService.WriteToDocument(docName, String.Format("{0}: {1}", key, value));
-		//		}
-		//	}
-		//}
 
 	}
 }
