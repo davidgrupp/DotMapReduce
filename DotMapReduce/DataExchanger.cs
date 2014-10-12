@@ -25,10 +25,12 @@ namespace DotMapReduce.Parallelization
 				if (start >= end)
 					return;
 				Int32 mid = ((start + end + 1) / 2);
+				Console.WriteLine("start:{0},  mid: {1},  end: {2}", start, mid, end);
 				for (var x = mid; x <= end; x++)
 				{
+					Console.WriteLine("round: {0}", x - mid);
 					var exchangeTasks = new List<Task>();
-					for (int y = start, i = 0; y <= mid - 1; y++, i++)
+					for (int y = start, i = 0; y < mid; y++, i++)
 					{
 						if ((x + i) <= end)
 						{
@@ -48,6 +50,10 @@ namespace DotMapReduce.Parallelization
 				var tskRght = Exchange(mid, end, progress);
 
 				Task.WaitAll(tskLeft, tskRght);
+
+				//Exchange(start, mid - 1, progress).Wait();
+				//Exchange(mid, end, progress).Wait();
+
 			});
 		}
 
@@ -58,6 +64,7 @@ namespace DotMapReduce.Parallelization
 				//Thread.Sleep(10);
 				var worker1 = _workers[w1];
 				var worker2 = _workers[w2];
+				Console.WriteLine(String.Format("{0} - {1}", w1, w2));
 				worker1.ExchangeKeyValues(worker2);
 			});
 		}
