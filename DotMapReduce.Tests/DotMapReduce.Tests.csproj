@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Generic\GenericRunnerTests.cs" />
+    <Compile Include="LINQ\LINQMapReduceTests.cs" />
     <Compile Include="MockFileSystem.cs" />
     <Compile Include="Threaded\ThreadedMapperContextTests.cs" />
     <Compile Include="Threaded\ThreadedMapReduceManagerTests.cs" />

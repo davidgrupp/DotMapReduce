@@ -93,6 +93,35 @@ namespace DotMapReduce.CouchDB.Tests
 			Assert.That(doc.Item, Is.EqualTo(testDoc.Item));
 		}
 
+		[Test, Category("Integration")]
+		public void ReadDocumentIds_Success()
+		{
+			//Arrange
+			var fileService = new CouchMapReduceFileService();
+
+			//Act
+			var results = fileService.ReadDocumentIds("baseball");
+
+			//Assert
+			Assert.That(results, Is.Not.Empty);
+		}
+
+		[Test, Category("Integration")]
+		public void WriteToDocument_Success()
+		{
+			//Arrange
+			var fileService = new CouchMapReduceFileService();
+			var ids = fileService.ReadDocumentIds("baseball");
+			Guid docGuid;
+			var docId = ids.FirstOrDefault(id => Guid.TryParse(id, out docGuid));
+
+			//Act
+			fileService.WriteToDocument(docId, Guid.NewGuid().ToString());
+
+			//Assert
+
+		}
+
 		public class TestDBDocument : CouchDbDocument
 		{
 			public String Item { get; set; }

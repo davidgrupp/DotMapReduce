@@ -62,17 +62,26 @@ namespace DotMapReduce.CouchDB
 			var expressionParts = Utilities.ObjectExpressionVisitor.GetPath<T>(expression);
 			if (false == expressionParts.Any())
 				throw new ArgumentException("expression must start with and have one property.");
-
 			jsField = expressionParts.First();
+			CreateUpdateFieldHandler(directory, jsField);
 
-
-			//var jsExpression = expressionParts.Aggregate((s1, s2) => String.Format("{0}.{1}", s1, s2));
-
-			//var request = new RestRequest(String.Format("/{0}/_design/app/_update/setfield/{1}?field=name&value=JP", directory, Id));
 			var request = new RestRequest(String.Format("/{0}/_design/app/_update/setfield/{1}", directory, Id));
 			request.AddParameter("expression", jsField, ParameterType.QueryString);
 			request.AddParameter("value", request.JsonSerializer.Serialize(content), ParameterType.QueryString);
 			_client.Put(request);
+		}
+
+		private void CreateUpdateFieldHandler(String directory, String jsField)
+		{
+
+			var request = new RestRequest(String.Format("{0}/_bulk_docs",directory));
+			request.RequestFormat = DataFormat.Json;
+			request.AddBody("");
+
+			//var jsExpression = expressionParts.Aggregate((s1, s2) => String.Format("{0}.{1}", s1, s2));
+
+			//var request = new RestRequest(String.Format("/{0}/_design/app/_update/setfield/{1}?field=name&value=JP", directory, Id));
+			
 		}
 
 		public List<String> ReadDocumentIds(String directory)

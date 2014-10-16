@@ -25,23 +25,20 @@ namespace DotMapReduce.Parallelization
 				if (start >= end)
 					return;
 				Int32 mid = ((start + end + 1) / 2);
-				Console.WriteLine("start:{0},  mid: {1},  end: {2}", start, mid, end);
-				for (var x = mid; x <= end; x++)
+				var rightListLen = end - mid + 1;
+				//Console.WriteLine("start:{0},  mid: {1},  end: {2}", start, mid, end);
+
+				var leftList = Enumerable.Range(start, mid - start).ToList();
+				var rightList = Enumerable.Range(mid, rightListLen).ToList();
+
+				for (var i = 0; i < rightList.Count() ; i++)
 				{
-					Console.WriteLine("round: {0}", x - mid);
+					//Console.WriteLine("round: {0}", i);
 					var exchangeTasks = new List<Task>();
-					for (int y = start, i = 0; y < mid; y++, i++)
+					for (var k = 0; k < leftList.Count(); k++)
 					{
-						if ((x + i) <= end)
-						{
-							exchangeTasks.Add(DoExchange(y, x + i));
-						}
-						else
-						{
-							exchangeTasks.Add(DoExchange(y, x + i - mid));
-						}
-						if (null != progress)
-							progress.Report(1);
+						var rightElm = GetRightElementIndex(i, k, rightListLen);
+						exchangeTasks.Add(DoExchange(leftList[k], rightList[rightElm]));
 					}
 					Task.WaitAll(exchangeTasks.ToArray());
 				}
@@ -57,6 +54,11 @@ namespace DotMapReduce.Parallelization
 			});
 		}
 
+		private Int32 GetRightElementIndex(Int32 x, Int32 y, Int32 mid)
+		{
+			return ((x + y) % mid);
+		}
+
 		private Task DoExchange(Int32 w1, Int32 w2)
 		{
 			return Task.Run(() =>
@@ -64,7 +66,7 @@ namespace DotMapReduce.Parallelization
 				//Thread.Sleep(10);
 				var worker1 = _workers[w1];
 				var worker2 = _workers[w2];
-				Console.WriteLine(String.Format("{0} - {1}", w1, w2));
+				//Console.WriteLine(String.Format("{0} - {1}", w1, w2));
 				worker1.ExchangeKeyValues(worker2);
 			});
 		}
