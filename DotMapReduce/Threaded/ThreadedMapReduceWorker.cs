@@ -79,13 +79,17 @@ namespace DotMapReduce.Threaded
 			}
 		}
 
-		public void ExchangeKeyValues(IMapReduceWorker otherWorker)
+		public void ExchangeKeyValues(IExchangable otherExchangable)
 		{
-			var _otherWorkersData = MapperContext.GetPartitionedEmittedValues(otherWorker.WorkerId);
-			otherWorker.SetReducerData(_otherWorkersData);
+			if (otherExchangable is IMapReduceWorker)
+			{
+				var otherWorker = otherExchangable as IMapReduceWorker;
+				var _otherWorkersData = MapperContext.GetPartitionedEmittedValues(otherWorker.WorkerId);
+				otherWorker.SetReducerData(_otherWorkersData);
 
-			var currentWorkersData = otherWorker.MapperContext.GetPartitionedEmittedValues(this.WorkerId);
-			this.SetReducerData(currentWorkersData);
+				var currentWorkersData = otherWorker.MapperContext.GetPartitionedEmittedValues(this.WorkerId);
+				this.SetReducerData(currentWorkersData);
+			}
 		}
 
 		private void SaveLastReducerResult(String outputDirectory, String outputFile)

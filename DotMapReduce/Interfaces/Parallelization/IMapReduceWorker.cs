@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DotMapReduce.Interfaces.Parallelization
 {
-	public interface IMapReduceWorker
+	public interface IMapReduceWorker : IExchangable
 	{
 		Int32 WorkerId { get; set; }
 		IMapperContext MapperContext { get; set; }
@@ -16,6 +16,6 @@ namespace DotMapReduce.Interfaces.Parallelization
 		Task RunMapperBatchAsync(String inputDirectory, List<String> idsBatch);
 		Task RunReducersAsync(String outputDirectory, String outputFile);
 		void SetReducerData(IEnumerable<IGrouping<String, String>> keyValueGroupings);
-		void ExchangeKeyValues(IMapReduceWorker otherWorker);
+		
 	}
 }

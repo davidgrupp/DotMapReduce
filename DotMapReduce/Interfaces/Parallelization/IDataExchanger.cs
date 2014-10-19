@@ -8,6 +8,6 @@ namespace DotMapReduce.Interfaces.Parallelization
 {
 	public interface IDataExchanger
 	{
-		void ExchangeData(List<IMapReduceWorker> workers);
+		void ExchangeData(IEnumerable<IExchangable> workers);
 	}
 }
