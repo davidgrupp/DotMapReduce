@@ -12,12 +12,14 @@ namespace DotMapReduce.Tests.Threaded
 	public class ThreadedMapperContextTests
 	{
 		[Test, Category("Unit")]
-		public void Threaded_Partition_Success()
+		public void Threaded_Emit_Partition_Success()
 		{
 			//Arrange
-			var context = new ThreadedMapperContext(10);
-			var tasks = new List<Task>();
 			var num = 100;
+			var workers = 10;
+			var context = new ThreadedMapperContext(workers);
+			var tasks = new List<Task>();
+
 			for (var i = 0; i < 100; i++)
 			{
 				tasks.Add(context.EmitAsync((i % (num / 3)).ToString(), "1"));
@@ -26,10 +28,14 @@ namespace DotMapReduce.Tests.Threaded
 			Task.WaitAll(tasks.ToArray());
 
 			//Act
-			var results = Enumerable.Range(0, 10).Select(i => context.GetPartitionedEmittedValues(i)).ToList();
+			var partitionResults = Enumerable.Range(0, 10).Select(i => context.GetPartitionedEmittedValues(i)).ToList();
+			var groupingResults = partitionResults.SelectMany(g => g).ToList();
+			var individualResults = groupingResults.SelectMany(g => g).ToList();
 
 			//Assert
-			Assert.That(results.All(r => r.Any()), Is.True);
+			Assert.That(partitionResults.Count, Is.EqualTo(workers));
+			Assert.That(groupingResults.Count, Is.EqualTo(num / 3));
+			Assert.That(individualResults.Count, Is.EqualTo(num));
 		}
 	}
 }
